@@ -1,0 +1,70 @@
+﻿<div class="container">
+    <div class="inner-header">
+        <div class="row">
+            <div class="col-lg-7 col-md-7">
+                <div class="advanced-search">
+                    <button type="button" class="category-btn">All Categories</button>
+                    <div class="input-group">
+                        <input type="text" placeholder="Bạn đang tìm gì?">
+                        <button type="button"><i class="ti-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-right col-md-4" style="padding:0px">
+                <ul class="nav-right">
+                    <li>
+                        @if (Session["TaiKhoan"] != null)
+                        {
+                            WebsiteRaoVat.Models.TaiKhoan taikhoan = (WebsiteRaoVat.Models.TaiKhoan)Session["TaiKhoan"];
+                            <button class="primary-btn" style="background-color:#000000">
+                                @taikhoan.TenNguoiDung
+                            </button>
+                            <input hidden id="session" value="1" />
+                        }
+                        else
+                        {
+                            <button id="btnDangNhap" class="primary-btn" style="background-color:#000000">
+                                Đăng nhập
+                            </button>
+                            <input hidden id="session" value="0" />
+                        }
+
+                        <button id="btnDangTin" class="primary-btn" style="margin-left:20px; border: solid 2px #e7ab3c">
+                            Đăng tin
+                        </button>
+
+
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#btnDangNhap").click(function () {
+            $("#popup_login").show();
+        });
+        $("#btnDangTin").click(function () {
+            if ($("#session").val() == 1) {
+                window.location = "/Home/DangTin";
+
+            } else {
+                $("#popup_login").show();
+
+            }
+        });
+
+    })
+    $("#btnQuanLyTin").click(function () {
+        if ($("#session").val() == 1) {
+            window.location = "/Home/QuanLyTin";
+
+        } else {
+            $("#popup_login").show();
+        }
+    });
+</script>

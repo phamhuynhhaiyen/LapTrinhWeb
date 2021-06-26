@@ -33,7 +33,8 @@ namespace WebsiteRaoVat.Models
 
         [Column(TypeName = "text")]
         public string Hinh { get; set; }
-
+        [StringLength(50)]
+        public string TenNguoiDung { get; set; }
         public int? Quyen { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

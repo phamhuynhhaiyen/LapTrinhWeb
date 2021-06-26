@@ -1,0 +1,134 @@
+﻿@model List<WebsiteRaoVat.Models.DanhMuc>
+@{
+    ViewBag.Title = "Đăng tin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="py-3">
+    <div class="container">
+        <div class="row" style="background-color:#fff; margin:1px; padding:2rem">
+            <form class="checkout-form">
+                <div class="row">
+                    <div class="col-lg-8" style="left:18%">
+                        <h4 class="text-center">Sản phẩm muốn bán</h4>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <input type="text" id="TieuDe" required="" placeholder="Tiêu đề ">
+                            </div>
+                            <div class="col-lg-6">
+                                <select id="MaDanhMuc" class="dropdownlst">
+                                    <option value="0">Danh mục</option>
+                                    @foreach (var item in Model)
+                                    {
+                                        <option value="@item.MaDanhMuc">@item.TenDanhMuc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-lg-6">
+                                <select id="LoaiSP" class="dropdownlst">
+                                    <option value="0">Loại sản phẩm</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <input type="number" id="Gia" required="" placeholder="Giá tiền muốn bán">
+                            </div>
+                            <div class="col-lg-6">
+                                <select id="TinhTrang" class="dropdownlst">
+                                    <option value="true">Mới</option>
+                                    <option value="false">Đã sử dụng</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-12">
+                                <input accept="image/*" onchange="" id="txtimg" name="image" type="file">
+                            </div>
+                            <div class="col-lg-12 ">
+                                <div style="border: 2px dashed #ebebeb;border-radius: 5px; padding-left: 20px; padding-top: 10px; margin-bottom: 25px;">
+                                    <div class="row">
+                                        <div class="col-3" style="object-fit:cover;" id="imgPro">
+
+                                            
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea id="MoTa" placeholder="Mô tả"></textarea>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <button class="primary-btn" style="border:none" onclick="AddBaiDang()">HOÀN THÀNH</button>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+@section Jsfooter{
+    <script>
+        var img = "";
+        $(document).ready(function () {
+            $("#MaDanhMuc").change(function () {
+                $.ajax({
+                    type: 'get',
+                    url: '/Home/getLoaiSP',
+                    data: {
+                        MaDanhMuc: $("#MaDanhMuc").val(),
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            $("#LoaiSP").empty();
+                            $.each(data.lstLoaiSP, function (k, v) {
+                                $("#LoaiSP").append(`<option value="` + v.MaLoaiSP + `">` + v.TenLoaiSP + `</option>`);
+                            });
+                        }
+                    }
+                });
+            });
+
+            $('#txtimg').change(function () {
+                if ($('#txtimg').val().length > 0) {
+                    if (window.FormData !== undefined) {
+                        var fileupload = $('#txtimg').get(0);
+                        var file = fileupload.files;
+                        var formdata = new FormData();
+                        formdata.append('file', file[0]);
+                        $.ajax({
+                            type: 'POST',
+                            url: '/Home/XuLyFile ',
+                            contentType: false, //Khong co hear
+                            processData: false,//Khong Xu Ly Du Lieu
+                            data: formdata,
+                            success: function (ImageData) {
+                                $('#imgPro').append(`<img src="`+ImageData+`"/>`);
+                                img += ImageData;
+                                //location.reload();
+                            }
+                        });
+                    }
+                } else {
+                    alert("Vui lòng chọn file");
+                }
+            });
+        });
+        function AddBaiDang() {
+            $.ajax({              
+                url: '/Home/AddBaiDang',
+                type:'post',
+                data: {
+                    MaLoaiSP: $("#LoaiSP").val(),
+                    TieuDe: $("#TieuDe").val(),
+                    Gia: $("#Gia").val(),
+                    TinhTrang: $("#TinhTrang").val(),
+                    MoTa: $("#MoTa").val(),
+                    Hinh: img,
+                },
+                success: function (data) {
+                    alert("Đăng thành công");
+                }
+            });
+        };
+    </script>    
+}

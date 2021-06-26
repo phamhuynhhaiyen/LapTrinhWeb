@@ -1,71 +1,74 @@
 ﻿@model WebsiteRaoVat.Models.TaiKhoan
 @{
     ViewBag.Title = "login";
-    Layout = "~/Views/Shared/_Login.cshtml";
 }
 
-<section class="ftco-section">
-    <div class="container">
-
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="login-wrap p-0">
-                    <h3 class="mb-4 text-center">Đăng nhập</h3>
-                    @using (Ajax.BeginForm("login", "Login", new AjaxOptions
-                    {
-                        InsertionMode = InsertionMode.Replace,
-                        UpdateTargetId = "ThongBao"
-                    }))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true, null, new { @class = "signin-form" })
-                        <div class="form-group">
-
-
-                            @Html.TextBox("Username", null, new { @class = "form-control", @placeholder = "UserName", @required = "" })
-
-
-                        </div>
-                        <div class="form-group">
-                            @Html.Password("Password", null, new { @class = "form-control", @placeholder = "Password", @id = "password-field", @required = "" })
-                            @*<input id="password-field" type="password" name="txtPassWord" class="form-control" placeholder="Password" required>*@
-                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="form-control btn btn-primary submit px-3">Đăng nhập</button>
-                        </div>
-                        <h4 id="ThongBao" style="color:red;"></h4>
-                        <div class="form-group d-md-flex">
-                            <div class="w-50">
-                                <label class="checkbox-wrap checkbox-primary">
-                                    <a href="~/Home/index" style="color: #fff">Thoát</a>
-                                </label>
-                            </div>
-                            <div class="w-50 text-md-right">
-                                <a href="~/Home/ForGotPassWord" style="color: #fff">Quên mật khẩu?</a>
-                            </div>
-                        </div>
-                    }
-                    <p class="w-100 text-center">&mdash; Hoặc &mdash;</p>
-                    <div class="form-group d-md-flex">
-                        <div class="w-50" style="padding:20px;">
-                            <a href="~/Login/loginFacebook" class="form-control submit px-3" style="background-color:blue;border-color:blue; text-align:center"><i class="fa fa-facebook-official" style="padding-right:3px;"></i>Facebook</a>
-                        </div>
-                        <div class="w-50 text-md-right" style="padding:20px;">
-                            <a href="~/Login/Add_Account" class="form-control submit px-3" style="background-color:red;border-color:red; text-align:center"><i class="fa fa-google-plus-official" style="padding-right:3px;"></i>Google +</a>
+<div id="popup_login">
+    <div class="row" >
+        <div class="col-lg-4 offset-lg-3" style="padding-top:5rem">
+            <div class="login-form" style="background-color:#fff; padding:2rem"> 
+                <button id="btnClose">X</button>
+                <h2>Đăng nhập tài khoản </h2>
+                <form action="#">
+                    <div class="group-input">
+                        <label for="username">Tên đăng nhập</label>
+                        <input type="text" required="" id="username">
+                    </div>
+                    <div class="group-input">
+                        <label for="pass">Mật khẩu</label>
+                        <input type="text" required="" id="pass">
+                    </div>
+                    <div class="group-input gi-check">
+                        <div class="gi-more">
+                            <label for="save-pass">
+                                Save Password
+                                <input type="checkbox" id="save-pass">
+                                <span class="checkmark"></span>
+                            </label>
+                            <a href="#" class="forget-pass">Forget your Password</a>
                         </div>
                     </div>
-                    <div class="form-group" style="width:77%; margin:auto; padding-bottom:10px">
-                        Bạn mới biết đến CoffeeCafe?
-                        <a href="~/Home/Add_Account" style="color:#fff;"><u>Đăng kí</u></a>
-                    </div>
+                    <button id="btnSubmit" class="site-btn login-btn">Sign In</button>
+                </form>
+                <div class="switch-login">
+                    <a href="./register.html" class="or-login">Or Create An Account</a>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 
+    <script>
+        $("#btnSubmit").click(function () {
+            DangNhap();           
+        });
+        function DangNhap() {
+            if ($("#username").val() != "" && $('#pass').val() != "") {
+                $.ajax({
+                    type: 'get',
+                    url: '/Login/KTDangNhap',
+                    data: {
+                        username: $("#username").val(),
+                        password: $('#pass').val(),
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            if (data.thanhcong == 1) {
+                                alert("Đăng nhập thành công");
+                                window.location = "/Home/Index";
+                            }
+                            
+                        }
+                    }
+                })
+            }
+            
+        }
+        $("#btnClose").click(function () {
+            $("#popup_login").hide();
+        });
+    </script>
 
 
 

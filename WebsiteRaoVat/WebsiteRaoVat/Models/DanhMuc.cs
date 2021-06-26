@@ -21,6 +21,9 @@ namespace WebsiteRaoVat.Models
         [StringLength(50)]
         public string TenDanhMuc { get; set; }
 
+        [Column(TypeName = "text")]
+        public string Hinh { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LoaiSanPham> LoaiSanPhams { get; set; }
     }

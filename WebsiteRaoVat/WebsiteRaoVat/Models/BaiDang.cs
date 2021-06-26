@@ -17,13 +17,18 @@ namespace WebsiteRaoVat.Models
 
         public int? MaLoaiSP { get; set; }
 
-        [Column(TypeName = "text")]
-        public string NoiDung { get; set; }
+        [Column(TypeName = "ntext")]
+        public string TieuDe { get; set; }
 
         public long? Gia { get; set; }
 
         public bool? TinhTrang { get; set; }
 
+        [Column(TypeName = "ntext")]
+        public string MoTa { get; set; }
+        [Column(TypeName = "text")]
+        public string HinhAnh { get; set; }
+        public int TrangThai { get; set; }
         public virtual LoaiSanPham LoaiSanPham { get; set; }
 
         public virtual TaiKhoan TaiKhoan { get; set; }

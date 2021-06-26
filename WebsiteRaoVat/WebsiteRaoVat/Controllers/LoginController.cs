@@ -22,7 +22,7 @@ namespace WebsiteRaoVat.Controllers
         // GET: Login
         public ActionResult login()
         {
-            return View();
+            return PartialView();
         }
         [HttpPost]
         // đăng nhập thường
@@ -34,13 +34,33 @@ namespace WebsiteRaoVat.Controllers
             var tv = (from c in db.TaiKhoans where c.Username == tk.Username && c.Password == tk.Password select c).FirstOrDefault();
             if (tv != null)
             {
-                Session["userName"] = tv;
+                Session["TaiKhoan"] = tv;
                 return RedirectToAction("Index", "Home");
             }
             return View();
             
         }
-
+        public JsonResult KTDangNhap(string username, string password)
+        {
+            try
+            {
+                var taikhoan = (from t in db.TaiKhoans where t.Username == username && t.Password == password select t).FirstOrDefault();
+                int thanhcong = 1;
+                if(taikhoan != null)
+                {
+                    Session["TaiKhoan"] = taikhoan;
+                }
+                else
+                {
+                    thanhcong = 0;
+                }
+                return Json(new { code = 200, thanhcong = thanhcong}, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
         //Đăng nhập bằng facebook
         public Uri RedirectUri
         {

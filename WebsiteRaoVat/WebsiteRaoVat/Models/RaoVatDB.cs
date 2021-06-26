@@ -24,8 +24,8 @@ namespace WebsiteRaoVat.Models
                 .Property(e => e.Username)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<BaiDang>()
-                .Property(e => e.NoiDung)
+            modelBuilder.Entity<DanhMuc>()
+                .Property(e => e.Hinh)
                 .IsUnicode(false);
 
             modelBuilder.Entity<DanhMuc>()

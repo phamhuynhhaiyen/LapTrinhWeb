@@ -1,45 +1,103 @@
-﻿
-<!DOCTYPE html>
-<html>
+﻿<html lang="zxx">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta name="description" content="Fashi Template">
+    <meta name="keywords" content="Fashi, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fashi</title>
 
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/Content/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/themify-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/css/style.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
+
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+    <!-- Page Preloder -->
+    <div id="preloder" style="display: none;">
+        <div class="loader" style="display: none;"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header-section" style="border-bottom:solid 1px;border-bottom-color:rgb(229,229,229);background-color:#fff">
+        <div class="header-top">
+            <div class="container">
+                <div class="ht-left">
+                    <div class="mail-service">
+                        <a href="/Home/Index">
+                            <img src="~/Content/img/logo.png">
+                        </a>
+                    </div>
+                    <div class="phone-service">
+                        <i class=" fa fa-envelope"></i>
+                        hello.colorlib@gmail.com
+                    </div>
+                </div>
+                <div class="ht-right">
+                    <div class="lan-selector">
+                        <div class="dd ddcommon borderRadius" tabindex="0" style="width: 300px;">
+                            <a class="ddTitle" href="#" style="color:#252525">
+                                <span class="divider"></span>
+                                <span class="ddlabel">Thêm</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lan-selector">
+                        <div class="dd ddcommon borderRadius" tabindex="0" style="width: 300px;">
+                            <a class="ddTitle" style="color:#252525">
+                                <span class="divider"></span>
+                                <span class="ddlabel">Chat</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lan-selector">
+                        <div class="dd ddcommon borderRadius" tabindex="0" style="width: 300px;">
+                            <a id="btnQuanLyTin" class="ddTitle" style="color:#252525">
+                                <span class="divider"></span>
+                                <span class="ddlabel">Quản lý tin</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lan-selector">
+                        <div class="dd ddcommon borderRadius" tabindex="0" style="width: 300px;">
+                            <a class="ddTitle" style="color:#252525" href="/Home/Index">
+                                <span class="divider"></span>
+                                <span class="ddlabel">Trang chủ</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+        @Html.Action("Menu", "Home")
+    </header>
+    <!-- Header End -->
+    @RenderBody()
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @Html.Action("login", "Login")
+    <!-- Js Plugins -->
+    <script src="~/Content/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
+    <script src="~/Content/js/jquery.countdown.min.js"></script>
+    <script src="~/Content/js/jquery.nice-select.min.js"></script>
+    <script src="~/Content/js/jquery.zoom.min.js"></script>
+    <script src="~/Content/js/jquery.dd.min.js"></script>
+    <script src="~/Content/js/jquery.slicknav.js"></script>
+    <script src="~/Content/js/owl.carousel.min.js"></script>
+    <script src="~/Content/js/main.js"></script>
+    @RenderSection("Jsfooter", required: false)
+    
 </body>
 </html>
