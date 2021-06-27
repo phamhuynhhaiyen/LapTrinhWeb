@@ -29,7 +29,7 @@
                                     <option value="0">Loại sản phẩm</option>
                                 </select>
                             </div>
-                            
+
                             <div class="col-lg-6">
                                 <input type="number" id="Gia" required="" placeholder="Giá tiền muốn bán">
                             </div>
@@ -42,14 +42,26 @@
                             <div class="col-lg-12">
                                 <input accept="image/*" onchange="" id="txtimg" name="image" type="file">
                             </div>
+                            <div class="col-lg-12">
+                                <input accept="image/*" onchange="" id="txtimg1" name="image" type="file">
+                            </div>
+                            <div class="col-lg-12">
+                                <input accept="image/*" onchange="" id="txtimg2" name="image" type="file">
+                            </div>
+                            <div class="col-lg-12">
+                                <input accept="image/*" onchange="" id="txtimg3" name="image" type="file">
+                            </div>
+                            <div class="col-lg-12">
+                                <input accept="image/*" onchange="" id="txtimg4" name="image" type="file">
+                            </div>
                             <div class="col-lg-12 ">
                                 <div style="border: 2px dashed #ebebeb;border-radius: 5px; padding-left: 20px; padding-top: 10px; margin-bottom: 25px;">
                                     <div class="row">
-                                        <div class="col-3" style="object-fit:cover;" id="imgPro">
-
-                                            
-
-                                        </div>
+                                        <div class="col-3" style="object-fit:cover; float:left" id="imgPro"></div>
+                                        <div class="col-3" style="object-fit:cover;float:left" id="imgPro1"></div>
+                                        <div class="col-3" style="object-fit:cover;float:left" id="imgPro2"></div>
+                                        <div class="col-3" style="object-fit:cover;float:left" id="imgPro3"></div>
+                                        <div class="col-3" style="object-fit:cover;float:left" id="imgPro4"></div>
                                     </div>
                                 </div>
                             </div>
@@ -69,6 +81,10 @@
 @section Jsfooter{
     <script>
         var img = "";
+        var img1 = "";
+        var img2 = "";
+        var img3 = "";
+        var img4 = "";
         $(document).ready(function () {
             $("#MaDanhMuc").change(function () {
                 $.ajax({
@@ -102,7 +118,7 @@
                             processData: false,//Khong Xu Ly Du Lieu
                             data: formdata,
                             success: function (ImageData) {
-                                $('#imgPro').append(`<img src="`+ImageData+`"/>`);
+                                $('#imgPro').append(`<img src="/Images/`+ImageData+`"/>`);
                                 img += ImageData;
                                 //location.reload();
                             }
@@ -113,6 +129,109 @@
                 }
             });
         });
+
+        $('#txtimg1').change(function () {
+            if ($('#txtimg1').val().length > 0) {
+                if (window.FormData !== undefined) {
+                    var fileupload = $('#txtimg1').get(0);
+                    var file = fileupload.files;
+                    var formdata = new FormData();
+                    formdata.append('file', file[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/XuLyFile ',
+                        contentType: false, //Khong co hear
+                        processData: false,//Khong Xu Ly Du Lieu
+                        data: formdata,
+                        success: function (ImageData) {
+                            $('#imgPro1').append(`<img src="/Images/` + ImageData + `"/>`);
+                            img1 += ImageData;
+                            //location.reload();
+                        }
+                    });
+                }
+            } else {
+                alert("Vui lòng chọn file");
+            }
+        });
+        
+
+        $('#txtimg2').change(function () {
+            if ($('#txtimg2').val().length > 0) {
+                if (window.FormData !== undefined) {
+                    var fileupload = $('#txtimg2').get(0);
+                    var file = fileupload.files;
+                    var formdata = new FormData();
+                    formdata.append('file', file[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/XuLyFile ',
+                        contentType: false, //Khong co hear
+                        processData: false,//Khong Xu Ly Du Lieu
+                        data: formdata,
+                        success: function (ImageData) {
+                            $('#imgPro2').append(`<img src="/Images/` + ImageData + `"/>`);
+                            img2 += ImageData;
+                            //location.reload();
+                        }
+                    });
+                }
+            } else {
+                alert("Vui lòng chọn file");
+            }
+        });
+
+        $('#txtimg3').change(function () {
+            if ($('#txtimg3').val().length > 0) {
+                if (window.FormData !== undefined) {
+                    var fileupload = $('#txtimg3').get(0);
+                    var file = fileupload.files;
+                    var formdata = new FormData();
+                    formdata.append('file', file[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/XuLyFile ',
+                        contentType: false, //Khong co hear
+                        processData: false,//Khong Xu Ly Du Lieu
+                        data: formdata,
+                        success: function (ImageData) {
+                            $('#imgPro3').append(`<img src="/Images/` + ImageData + `"/>`);
+                            img3 += ImageData;
+                            //location.reload();
+                        }
+                    });
+                }
+            } else {
+                alert("Vui lòng chọn file");
+            }
+        });
+        
+        $('#txtimg4').change(function () {
+            if ($('#txtimg4').val().length > 0) {
+                if (window.FormData !== undefined) {
+                    var fileupload = $('#txtimg4').get(0);
+                    var file = fileupload.files;
+                    var formdata = new FormData();
+                    formdata.append('file', file[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/XuLyFile ',
+                        contentType: false, //Khong co hear
+                        processData: false,//Khong Xu Ly Du Lieu
+                        data: formdata,
+                        success: function (ImageData) {
+                            $('#imgPro4').append(`<img src="/Images/` + ImageData + `"/>`);
+                            img4 += ImageData;
+                            //location.reload();
+                        }
+                    });
+                }
+            } else {
+                alert("Vui lòng chọn file");
+            }
+        });
+        
+
         function AddBaiDang() {
             $.ajax({              
                 url: '/Home/AddBaiDang',
@@ -124,6 +243,10 @@
                     TinhTrang: $("#TinhTrang").val(),
                     MoTa: $("#MoTa").val(),
                     Hinh: img,
+                    Hinh1: img1,
+                    Hinh2: img2,
+                    Hinh3: img3,
+                    Hinh4: img4,
                 },
                 success: function (data) {
                     alert("Đăng thành công");

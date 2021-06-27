@@ -1,0 +1,24 @@
+1.Database thêm cột HinhAnh1, HinhAnh2, HinhAnh3, HinhAnh4 vào bảng BaiDang
+
+2.BaiDang.cs thêm:
+	+ public string HinhAnh1 { get; set; }
+        [Column(TypeName = "text")]
+        + public string HinhAnh2 { get; set; }
+        [Column(TypeName = "text")]
+        + public string HinhAnh3 { get; set; }
+        [Column(TypeName = "text")]
+        public string HinhAnh4 { get; set; }
+
+3. Index.cshtml sửa trong <script> câu lệnh <img src="`+v.HinhAnh+`" /> thành <img src="/Images/`+v.HinhAnh+`" />
+
+4. BaiDang.cshtml
+
+5. DangTin.cshtml 
+	+ thêm ở 1 số thẻ ở chổ thẻ : <input accept="image/*" onchange="" id="txtimg" name="image" type="file">
+	+ thêm ở 1 số thẻ ở chổ thẻ : <div class="col-3" style="object-fit:cover; float:left" id="imgPro"></div>
+	+ thêm trong @section Jsfooter{}
+
+6.HomeController:
+	+ public JsonResult AddBaiDang()
+	+ public string XuLyFile(HttpPostedFileBase file)
+	+ public ActionResult BaiDang(int id)

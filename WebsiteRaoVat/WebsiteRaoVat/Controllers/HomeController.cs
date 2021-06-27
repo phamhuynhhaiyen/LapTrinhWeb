@@ -32,7 +32,7 @@ namespace WebsiteRaoVat.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        public JsonResult AddBaiDang(int MaLoaiSP, string TieuDe, long Gia, bool TinhTrang, string MoTa, string Hinh)
+        public JsonResult AddBaiDang(int MaLoaiSP, string TieuDe, long Gia, bool TinhTrang, string MoTa, string Hinh, string Hinh1, string Hinh2, string Hinh3, string Hinh4)
         {
             try
             {
@@ -44,6 +44,10 @@ namespace WebsiteRaoVat.Controllers
                 baidang.TinhTrang = TinhTrang;
                 baidang.MoTa = MoTa;
                 baidang.HinhAnh = Hinh;
+                baidang.HinhAnh1 = Hinh1;
+                baidang.HinhAnh2 = Hinh2;
+                baidang.HinhAnh3 = Hinh3;
+                baidang.HinhAnh4 = Hinh4;
                 baidang.Username = taikhoan.Username;
                 baidang.TrangThai = 0;
                 db.BaiDangs.Add(baidang);
@@ -56,7 +60,7 @@ namespace WebsiteRaoVat.Controllers
             }
         }
         public string XuLyFile(HttpPostedFileBase file)
-        {
+         {
             string path = Server.MapPath("~/Images/" + file.FileName);
             try
             {
@@ -68,7 +72,7 @@ namespace WebsiteRaoVat.Controllers
             }
             catch { }
 
-            return "/Images/" + file.FileName;
+            return  file.FileName;
 
         }
         public ActionResult Menu()
@@ -111,8 +115,10 @@ namespace WebsiteRaoVat.Controllers
         }
 
         public ActionResult BaiDang(int id)
-        {           
-            return View();
+        {
+            var sp = db.BaiDangs.Where(n => n.MaBaiDang == id);
+            ViewBag.baidang = sp;
+            return View(sp);
         }
 
     }
