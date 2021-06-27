@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 text-right col-md-4" style="padding:0px">
+            <div class="col-lg-5 text-right col-md-5" style="padding:0px 15px;">
                 <ul class="nav-right">
                     <li>
                         @if (Session["TaiKhoan"] != null)
@@ -62,6 +62,14 @@
     $("#btnQuanLyTin").click(function () {
         if ($("#session").val() == 1) {
             window.location = "/Home/QuanLyTin";
+
+        } else {
+            $("#popup_login").show();
+        }
+    });
+    $("#btnChat").click(function () {
+        if ($("#session").val() == 1) {
+            window.location = "/Chat/Chat";
 
         } else {
             $("#popup_login").show();

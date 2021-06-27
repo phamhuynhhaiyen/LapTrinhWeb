@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MoMo;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -60,7 +62,7 @@ namespace WebsiteRaoVat.Controllers
             }
         }
         public string XuLyFile(HttpPostedFileBase file)
-         {
+        {
             string path = Server.MapPath("~/Images/" + file.FileName);
             try
             {
@@ -72,7 +74,7 @@ namespace WebsiteRaoVat.Controllers
             }
             catch { }
 
-            return  file.FileName;
+            return "/Images/" + file.FileName;
 
         }
         public ActionResult Menu()
@@ -116,11 +118,70 @@ namespace WebsiteRaoVat.Controllers
 
         public ActionResult BaiDang(int id)
         {
-            var sp = db.BaiDangs.Where(n => n.MaBaiDang == id);
-            ViewBag.baidang = sp;
-            return View(sp);
+            BaiDang baidang = db.BaiDangs.Where(x => x.MaBaiDang == id).FirstOrDefault();
+            return View(baidang);
         }
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public void ThanhToanMomo(int tongtien)
+        {
+            //request params need to request to MoMo system
+            string endpoint = "https://payment.momo.vn/gw_payment/transactionProcessor";
+            string partnerCode = "MOMODDI520210624";
+            string accessKey = "xryFOk958utQJR3T";
+            string serectkey = "art4TPJhFphYnpVLIDX9pIWKcXybGJw3";
+            string orderInfo = "Mua quảng cáo";
+            string returnUrl = "https://localhost:44349/Home/QuanLyTin";
+            string notifyurl = "https://momo.vn/notify";
 
+            string amount = ""+ tongtien;
+            string orderid = Guid.NewGuid().ToString();
+            string requestId = Guid.NewGuid().ToString();
+            string extraData = "";
+
+            //Before sign HMAC SHA256 signature
+            string rawHash = "partnerCode=" +
+                partnerCode + "&accessKey=" +
+                accessKey + "&requestId=" +
+                requestId + "&amount=" +
+                amount + "&orderId=" +
+                orderid + "&orderInfo=" +
+                orderInfo + "&returnUrl=" +
+                returnUrl + "&notifyUrl=" +
+                notifyurl + "&extraData=" +
+                extraData;
+
+            log.Debug("rawHash = " + rawHash);
+
+            MoMoSecurity crypto = new MoMoSecurity();
+            //sign signature SHA256
+            string signature = crypto.signSHA256(rawHash, serectkey);
+            log.Debug("Signature = " + signature);
+
+            //build body json request
+            JObject message = new JObject
+            {
+                { "partnerCode", partnerCode },
+                { "accessKey", accessKey },
+                { "requestId", requestId },
+                { "amount", amount },
+                { "orderId", orderid },
+                { "orderInfo", orderInfo },
+                { "returnUrl", returnUrl },
+                { "notifyUrl", notifyurl },
+                { "extraData", extraData },
+                { "requestType", "captureMoMoWallet" },
+                { "signature", signature }
+
+            };
+            log.Debug("Json request to MoMo: " + message.ToString());
+            string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, message.ToString());
+
+            JObject jmessage = JObject.Parse(responseFromMomo);
+            log.Debug("Return from MoMo: " + jmessage.ToString());
+
+            //yes...
+            System.Diagnostics.Process.Start(jmessage.GetValue("payUrl").ToString());
+        }
     }
    
 }

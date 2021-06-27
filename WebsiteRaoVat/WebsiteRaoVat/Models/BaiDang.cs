@@ -26,9 +26,11 @@ namespace WebsiteRaoVat.Models
 
         [Column(TypeName = "ntext")]
         public string MoTa { get; set; }
+
         [Column(TypeName = "text")]
         public string HinhAnh { get; set; }
-        public int TrangThai { get; set; }
+
+        public int? TrangThai { get; set; }
         [Column(TypeName = "text")]
         public string HinhAnh1 { get; set; }
         [Column(TypeName = "text")]
@@ -37,7 +39,7 @@ namespace WebsiteRaoVat.Models
         public string HinhAnh3 { get; set; }
         [Column(TypeName = "text")]
         public string HinhAnh4 { get; set; }
-        
+
         public virtual LoaiSanPham LoaiSanPham { get; set; }
 
         public virtual TaiKhoan TaiKhoan { get; set; }

@@ -46,16 +46,97 @@
 
 </section>
 <section class="py-0" >
-    <div class="container">
-        <div class="row" style="background-color:#fff; margin:1px; padding:1rem 3rem" id="frmDaiDang">
-
-                      
+    <div class="container" id="frmDaiDang">
+        <div class="row pn-product" style="background-color:#fff; margin:1px; padding:1rem;" >
+            <div class="col-2"  style="object-fit:cover; padding:0.5rem; ">
+                <img src="~/Images/anvat.jpg" />
+            </div>
+            <div class="col-6" style="padding:0.5rem;">
+                <h4 style="margin-bottom:5px">Đồ ăn Hàn Quốc</h4>
+                <h4 style="color:red; font-weight:700">2000000</h4>
+                <button style="bottom:0px; ">Quảng cáo</button>
+            </div>
+            <div class="col-4" style="padding:0.5rem; float:right">
+                <div class="icon" style="float:right;">
+                    <i class="icon_heart_alt" style="font-size:25px" ></i>
+                </div>
+            </div>
         </div>
         
     </div>
 
 </section>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalQuangCao">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">QUẢNG CÁO BÀI ĐĂNG</h5>
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>*@
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3">
+                        <button class="btn btn-info" style="margin-bottom:5px" id="1000" name="btnTien">
+                            1 ngày
+                        </button>
+                        1.000 đ
+                        <button class="btn btn-info" style="margin-bottom:5px" id="3000" name="btnTien">
+                            3 ngày
+                        </button>
+                        3.000 đ
+                        <button class="btn btn-info" style="margin-bottom:5px" id="5000" name="btnTien">
+                            5 ngày
+                        </button>
+                        5.000 đ
+                    </div>
+                    <div class="col-8">
+                        Bạn muốn bài bán được hiện ngay trang chủ và tăng số lượng người tiếp cận hơn? Vui lòng chọn ngay số lượng ngày cần hiển thị theo nhu cầu của bạn.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnXacNhan">Xác nhận</button>
+                <button type="button" class="btn btn-danger" id="btnClose" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    $(document).ready(function () {
+        $.ajax({
+            type: 'get',
+            url: '/Home/getBaiDang',
+            data: {
+                TrangThai: 0
+            },
+            success: function (data) {
+                $('#frmDaiDang').empty();
+                $.each(data.lstBaiDang, function (k, v) {
+                    var content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem 1rem ;" >
+            <div class="col-2"  style="object-fit:cover; padding:0.5rem; ">
+                <img src="`+ v.HinhAnh + `" />
+            </div>
+            <div class="col-6" style="padding:0.5rem;">
+                <h4 style="margin-bottom:5px">`+ v.TieuDe + `</h4>
+                <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>
+                <button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="`+ v.MaBaiDang + `">Quảng cáo</button>
+            </div>
+            <div class="col-4" style="padding:0.5rem; float:right">
+                <div class="icon" style="float:right;">
+                    <i class="icon_heart_alt" style="font-size:25px" ></i>
+                </div>
+            </div>
+        </div>`;
+                    $('#frmDaiDang').append(content);
+                });
+            }
+        })
+    });
+
     $(document).on('click', "button[name = 'btnOption']", function () {
         //alert($(this).attr('id'));
         $.ajax({
@@ -65,10 +146,49 @@
                 TrangThai: $(this).attr('id')
             },
             success: function (data) {
+                $('#frmDaiDang').empty();
                 $.each(data.lstBaiDang, function (k, v) {
-                    $('#frmDaiDang').append('<p> '+v.TieuDe+' <\p>');
+                    var content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem 1rem ;" >
+            <div class="col-2"  style="object-fit:cover; padding:0.5rem; ">
+                <img src="`+v.HinhAnh+`" />
+            </div>
+            <div class="col-6" style="padding:0.5rem;">
+                <h4 style="margin-bottom:5px">`+v.TieuDe+`</h4>
+                <h4 style="color:red; font-weight:700">`+ v.Gia +`</h4>
+                <button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="`+ v.MaBaiDang+`">Quảng cáo</button>
+            </div>
+            <div class="col-4" style="padding:0.5rem; float:right">
+                <div class="icon" style="float:right;">
+                    <i class="icon_heart_alt" style="font-size:25px" ></i>
+                </div>
+            </div>
+        </div>`;
+                    $('#frmDaiDang').append(content);
                 });
             }
         })
+    });
+    $(document).on('click', "button[name = 'btnQuangCao']", function () {
+        $('#modalQuangCao').show();
+    });
+    $('#btnClose').click(function () {
+        $('#modalQuangCao').hide();
+    });
+    var giatien = 0;
+    $(document).on('click', "button[name = 'btnTien']", function () {
+        giatien = $(this).attr('id');
+    });
+
+    $('#btnXacNhan').click(function () {
+        $.ajax({
+            type: 'get',
+            url: '/Home/ThanhToanMomo/tongtien',
+            data: {
+                tongtien: giatien
+            },
+            success: function (data) {
+
+            }
+        });
     });
 </script>
