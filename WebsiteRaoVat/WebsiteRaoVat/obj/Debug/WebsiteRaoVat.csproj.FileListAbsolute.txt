@@ -100,7 +100,6 @@ C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\Microsoft.Owin.Security
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.csprojAssemblyReference.cache
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.csproj.CoreCompileInputs.cache
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.csproj.CopyComplete
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.dll
@@ -109,3 +108,4 @@ C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\Facebook.dll
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\Facebook.xml
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\log4net.dll
 C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\bin\log4net.xml
+C:\Users\hp\source\repos\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.csproj.AssemblyReference.cache

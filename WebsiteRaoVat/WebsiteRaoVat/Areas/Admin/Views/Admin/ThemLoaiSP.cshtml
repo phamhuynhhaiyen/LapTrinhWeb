@@ -1,0 +1,70 @@
+﻿@model WebsiteRaoVat.Models.LoaiSanPham
+@{
+    ViewBag.Title = "ThemLoaiSP";
+    Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item">Admin</li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Thêm loại sản phẩm</a></li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("ThemLoaiSP", "Admin", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div style="color:blue" class="form-horizontal">
+    
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div style="padding:10px" class="row">
+            <div style="margin-left:15px" class="col">
+                @Html.LabelFor(model => model.TenLoaiSP, htmlAttributes: new { @class = "control-label col-md-2" })
+            </div>
+            <div style="margin-right:440px " class="col-md-6">
+                @Html.EditorFor(model => model.TenLoaiSP, new { htmlAttributes = new { @class = "form-control" } })
+
+            </div>
+        </div>
+
+        <div style="padding:10px" class="row">
+            <div style="margin-left:0px" class="col">
+                @Html.LabelFor(model => model.MaDanhMuc, htmlAttributes: new { @class = "control-label col-md-2" })
+            </div>
+            <div style="margin-right:440px" class="col-md-6">
+                @Html.DropDownList("MaDanhMuc", null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div style="padding:10px" class="row">
+            <div style="margin-left:15px" class="col">
+                @Html.LabelFor(model => model.Hinh, htmlAttributes: new { @class = "control-label col-md-2" })
+                </div>
+                <div style="margin-right:440px " class="col-md-6">
+
+                    <input name="Hinh" type="file" />
+                    <span style="color:red">@ViewBag.upload</span>
+                </div>
+            </div>
+
+        <div class="form-group">
+            <div style="padding:50px" class="col-md-offset-2 col-md-10">
+                <button style="background-color:blue;font-size: 17px" type="submit">Thêm</button>
+            </div>
+        </div>
+    </div>
+
+
+}
+<style>
+    .a {
+        display: inline-block;
+    }
+
+    .col-md-offset-2 col-md-10 {
+        text-align: center;
+    }
+</style>
+

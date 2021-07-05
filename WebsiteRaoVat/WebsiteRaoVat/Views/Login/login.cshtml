@@ -4,11 +4,13 @@
 }
 
 <div id="popup_login">
-    <div class="row" >
-        <div class="col-lg-4 offset-lg-3" style="padding-top:5rem">
-            <div class="login-form" style="background-color:#fff; padding:2rem"> 
-                <button id="btnClose">X</button>
-                <h2>Đăng nhập tài khoản </h2>
+    <div class="row" style="margin-left:10rem;">
+        <div class="offset-lg-3" style="padding-top:5rem;width:500px">
+            <button id="btnClose" class="btn btn-default" style="float:right">
+                <img src="~/Content/img/delete_50px.png" height="30" width="30" />
+            </button>
+            <div class="login-form" style="background-color:#fff; padding:2rem">
+                <h3 class="text-center" style="margin-bottom:15px">Đăng nhập</h3>
                 <form action="#">
                     <div class="group-input">
                         <label for="username">Tên đăng nhập</label>
@@ -29,9 +31,15 @@
                         </div>
                     </div>
                     <button id="btnSubmit" class="site-btn login-btn">Sign In</button>
+                    <div class="group-input" style="margin-top:10px">
+                        <button class="social-btn" style="width:200px"><img src="~/Images/facebook_f_20px.png" />&ensp;facebook</button>
+                        <button class="social-btn" style="width:200px; float:right">
+                            <img src="~/Images/google_20px.png" />&ensp;google
+                        </button>
+                    </div>
                 </form>
                 <div class="switch-login">
-                    <a href="./register.html" class="or-login">Or Create An Account</a>
+                    <a href="#" class="or-login">Or Create An Account</a>
                 </div>
             </div>
         </div>

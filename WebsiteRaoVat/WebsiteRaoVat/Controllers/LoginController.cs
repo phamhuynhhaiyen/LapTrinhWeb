@@ -239,9 +239,9 @@ namespace WebsiteRaoVat.Controllers
         //Đăng xuất
         public ActionResult DangXuat()
         {
-            Session["userName"] = null;
+            Session["Taikhoan"] = null;
             FormsAuthentication.SignOut();
-            return RedirectToAction("login", "Login");
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult thu()

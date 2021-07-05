@@ -4354,3 +4354,47 @@ ol {
 	display: none;
 }
 
+.social-btn {
+	color: #000;
+	background: #fff;
+	border: 1px solid #ebebeb;
+	font-size: 14px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding: 13px;
+}
+#sidebar {
+	top: 179px;
+	bottom: 0;
+	right: 10%;
+	position: fixed;
+	text-align: center;
+}
+#headerbar {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	box-sizing: border-box;
+	z-index: 1;
+}
+.dropdown-content {
+	display: none;
+	position: absolute;
+	z-index: 2;
+	background-color: #fff;
+	width: 200px;
+	border: solid 1px #ebebeb;
+}
+.ddTitle1:hover .dropdown-content {
+	display: block;
+}
+.dropdown-content ul li {
+	padding:1rem;
+	
+}
+.dropdown-content ul li a:hover {
+	color:#e7ab3c;
+}
+	.dropdown-content ul li a {
+		color: #000;
+	}

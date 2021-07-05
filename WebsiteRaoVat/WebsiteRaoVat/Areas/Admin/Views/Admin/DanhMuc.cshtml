@@ -1,0 +1,82 @@
+﻿@using WebsiteRaoVat.Models
+@model IEnumerable<DanhMuc>
+
+@{
+    ViewBag.Title = "DanhMuc";
+    Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
+    WebGrid webGrid = new WebGrid(source:Model, rowsPerPage: 5);
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item">Admin</li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="#">Danh sách danh mục</a></li>
+    </ol>
+</nav>
+
+
+<div class="grid-product">
+
+    @webGrid.GetHtml(
+        tableStyle: "tablesp",
+        headerStyle: "gridhead",
+        footerStyle: "gridfooter",
+        rowStyle: "gridrow",
+        alternatingRowStyle: "gridaltrow",
+        columns: webGrid.Columns(
+            webGrid.Column("MaDanhMuc", "Mã danh mục", style: "id1"),
+            webGrid.Column("TenDanhMuc", "Tên danh mục", style: "id"),
+            webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
+          
+            webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaDanhMuc", new { id = c.MaDanhMuc })),
+            webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaDanhMuc", new { id = c.MaDanhMuc }))
+           ))
+</div>
+
+<style>
+
+
+    .tablesp {
+        width: 1100px;
+        color: blue;
+        border: 1px solid #ed71a3;
+        display: table;
+        margin-left: 50px;
+        margin-bottom: 20px;
+        background-color: #fff;
+    }
+
+    .gridhead {
+        background-color: blue;
+     
+        height: 50px;
+    }
+
+        .gridhead > th > a {
+            color: white;
+             text-align:center;
+            display: table-cell;
+        }
+
+    .gridaltrow {
+        border: solid;
+        height: 150px
+    }
+
+    .gridrow {
+        border: solid;
+        height: 150px
+    }
+
+    .id {
+        display: table-cell;
+      
+    }
+    .id1 {
+        display: table-cell;
+       
+      
+    }
+
+   
+</style>

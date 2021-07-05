@@ -1,0 +1,110 @@
+﻿@model List<WebsiteRaoVat.Models.QuangCao>
+@{
+    ViewBag.Title = "DSTinDang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<input hidden id="txtID" value="@ViewBag.MaDanhMuc" />
+<section class="py-3" style="margin-top:10%">
+    <div class="container">
+        <div class="row">
+            <div class="col-7" id="frmBaiDang">
+
+                @foreach (var item in Model)
+                {
+                    <div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem;" id="@item.MaBaiDang" name="frmSP">
+                        <div class="col-2" style="object-fit:cover; padding:0rem; ">
+                            <img src="@item.BaiDang.HinhAnh" width="110" height="110"/>
+                        </div>
+                        <div class="col-9" style="padding:0.5rem;">                           
+                                <h5 style="margin-bottom:5px">@item.BaiDang.TieuDe </h5>
+                                <h5 style="color:red; font-weight:700">@item.BaiDang.Gia</h5>  
+                                <div class="row" style="margin-left:0px; ">
+                                    <div class="icon" style="margin-top: 2px">
+                                        <img src="~/Images/flower_doodle_25px.png" width="20" />
+                                    </div>
+                                    <p style="margin-bottom:0px">Tin ưu tiên</p>
+                                </div>                           
+                        </div>
+                        <div class="col-1" style="padding:0.5rem; float:right">
+                            <div class="icon" style="float:right;">
+                                <i class="icon_heart_alt" style="font-size:20px"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="col-4" id="sidebar" style="background-color:#fff; margin:1px; padding:1rem;height:600px">
+                <div class="container">
+                    <table class="table table-borderless">
+                        <tbody>
+
+                            <tr>
+                                <th scope="row" width="40%">Danh mục</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loại sản phẩm</th>
+                                
+                            </tr>
+                            <tr>
+                                <th scope="row">Tình trạng</th>
+                                <td></td>
+                            <tr>
+                                <th scope="row">Thời gian</th>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Giá</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Jsfooter{
+    <script>
+        var madanhmuc = $('#txtID').val();
+        $(document).ready(function () {
+            loadBaiDang();
+        });
+        function loadBaiDang() {
+            $.ajax({
+                type: 'get',
+                url: '/TinDang/getBaiDang',
+                data: {
+                    id: madanhmuc,
+                }, success: function (data) {
+                    if (data.code == 200) {
+                        $.each(data.lstBaiDang, function (k, v) {
+                            let content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem;" id="` + v.MaBaiDang +`" name="frmSP">
+                        <div class="col-2" style="object-fit:cover; padding:0rem; ">
+                            <img src="`+v.HinhAnh+`" width="110" height="110"/>
+                        </div>
+                        <div class="col-9" style="padding:0.5rem;">
+                                <h5 style="margin-bottom:5px">`+v.TieuDe+ `</h5>
+                                <h5 style="color:red; font-weight:700">`+v.Gia+`</h5>
+                        </div>
+                        <div class="col-1" style="padding:0.5rem; float:right">
+                            <div class="icon" style="float:right;">
+                                <i class="icon_heart_alt" style="font-size:20px"></i>
+                            </div>
+                        </div>
+                    </div>`;
+                            $('#frmBaiDang').append(content);
+                        });
+                    }
+                }
+            });
+        }
+        $(document).on('click', "div[name='frmSP']", function () {
+            //alert($(this).attr('id'));
+            window.location = '/Home/BaiDang/' + $(this).attr('id');
+
+        });
+    </script>
+}

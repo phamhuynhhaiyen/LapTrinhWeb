@@ -9,6 +9,12 @@ namespace WebsiteRaoVat.Models
     [Table("BaiDang")]
     public partial class BaiDang
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public BaiDang()
+        {
+            QuangCaos = new HashSet<QuangCao>();
+        }
+
         [Key]
         public int MaBaiDang { get; set; }
 
@@ -31,17 +37,26 @@ namespace WebsiteRaoVat.Models
         public string HinhAnh { get; set; }
 
         public int? TrangThai { get; set; }
+
+        public DateTime? NgayDang { get; set; }
+
         [Column(TypeName = "text")]
         public string HinhAnh1 { get; set; }
+
         [Column(TypeName = "text")]
         public string HinhAnh2 { get; set; }
+
         [Column(TypeName = "text")]
         public string HinhAnh3 { get; set; }
+
         [Column(TypeName = "text")]
         public string HinhAnh4 { get; set; }
 
         public virtual LoaiSanPham LoaiSanPham { get; set; }
 
         public virtual TaiKhoan TaiKhoan { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QuangCao> QuangCaos { get; set; }
     }
 }

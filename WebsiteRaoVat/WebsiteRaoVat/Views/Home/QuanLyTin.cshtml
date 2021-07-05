@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="py-3">
+<section class="py-3" style="margin-top:11%">
     <div class="container">
         <div class="row" style="background-color:#fff; margin:1px; padding:1rem 3rem">
 
@@ -105,7 +105,28 @@
         </div>
     </div>
 </div>
+
+<div class="modal" id="modalDuyet">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">XÁC NHẬN</h5>
+                <button type="button" class="close" onclick="modalClose()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="frmMess">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDongY">Đồng ý</button>
+                <button type="button" class="btn btn-secondary" onclick="modalClose()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    var ma;
     $(document).ready(function () {
         $.ajax({
             type: 'get',
@@ -122,21 +143,25 @@
             </div>
             <div class="col-6" style="padding:0.5rem;">
                 <h4 style="margin-bottom:5px">`+ v.TieuDe + `</h4>
-                <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>
-                <button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="`+ v.MaBaiDang + `">Quảng cáo</button>
+                <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>`
+                    if (v.NgayHetHan == null) {
+                        content += `<button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="` + v.MaBaiDang + `">Quảng cáo</button>`;
+                        content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
+                    }
+                    else {
+                        content += `<button style="bottom:0px;" class="btn btn-info">Đang quảng cáo</button>`;
+                        content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
+                    }
+                    content+=`
             </div>
-            <div class="col-4" style="padding:0.5rem; float:right">
-                <div class="icon" style="float:right;">
-                    <i class="icon_heart_alt" style="font-size:25px" ></i>
-                </div>
-            </div>
+            
         </div>`;
                     $('#frmDaiDang').append(content);
                 });
             }
         })
     });
-
+    var lstquangcao = [];
     $(document).on('click', "button[name = 'btnOption']", function () {
         //alert($(this).attr('id'));
         $.ajax({
@@ -146,29 +171,47 @@
                 TrangThai: $(this).attr('id')
             },
             success: function (data) {
+                console.log(data.lstBaiDang);
+                console.log(data.lstgop);
+                lstquangcao = data.lstquangcao;
                 $('#frmDaiDang').empty();
                 $.each(data.lstBaiDang, function (k, v) {
                     var content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem 1rem ;" >
             <div class="col-2"  style="object-fit:cover; padding:0.5rem; ">
-                <img src="`+v.HinhAnh+`" />
+                <img src="`+ v.HinhAnh + `" />
             </div>
             <div class="col-6" style="padding:0.5rem;">
-                <h4 style="margin-bottom:5px">`+v.TieuDe+`</h4>
-                <h4 style="color:red; font-weight:700">`+ v.Gia +`</h4>
-                <button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="`+ v.MaBaiDang+`">Quảng cáo</button>
+                <h4 styssle="margin-bottom:5px">`+ v.TieuDe + `</h4>
+                <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>`;
+                    if (v.TrangThai == 0) {
+                        if (v.NgayHetHan == null) {
+                            content += `<button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="` + v.MaBaiDang + `">Quảng cáo</button>`;
+                            content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
+                        }
+                        else {
+                            content += `<button style="bottom:0px;" class="btn btn-info">Đang quảng cáo</button>`;
+                            content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
+                        }
+                    }
+                    if (v.TrangThai == 1) {
+                        content += `<button style="bottom:0px;" class="btn btn-info" name="btnResend" id="` + v.MaBaiDang + `">Gửi lại</button>`;
+                    }
+                    if (v.TrangThai == 3) {
+                        content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHienThi" id="` + v.MaBaiDang + `">Hiển thị</button>`;
+                    }
+                content+=`
             </div>
-            <div class="col-4" style="padding:0.5rem; float:right">
-                <div class="icon" style="float:right;">
-                    <i class="icon_heart_alt" style="font-size:25px" ></i>
-                </div>
-            </div>
+            
         </div>`;
+                    
                     $('#frmDaiDang').append(content);
                 });
             }
         })
     });
     $(document).on('click', "button[name = 'btnQuangCao']", function () {
+        ma = $(this).attr('id');
+        //alert(ma);
         $('#modalQuangCao').show();
     });
     $('#btnClose').click(function () {
@@ -177,18 +220,70 @@
     var giatien = 0;
     $(document).on('click', "button[name = 'btnTien']", function () {
         giatien = $(this).attr('id');
+        
     });
 
     $('#btnXacNhan').click(function () {
+        //alert(giatien +""+ma);
         $.ajax({
-            type: 'get',
-            url: '/Home/ThanhToanMomo/tongtien',
+            type: 'post',
+            url: '/Home/ThanhToanMomo',
             data: {
-                tongtien: giatien
+                tongtien: giatien,
+                mabaidang: ma,
             },
             success: function (data) {
-
+                //alert(giatien);
             }
         });
+    });
+    function modalClose() {
+        $('#modalDuyet').hide();
+
+    }
+    var capnhattrangthai;
+    
+    $(document).on('click', "button[name='btnResend']", function () {
+        $('#frmMess').empty();
+        $('#frmMess').append('<p>Bạn có chắc chắn gửi lại bài đăng</p>');
+        $('#modalDuyet').show();
+        ma = $(this).attr('id');
+        capnhattrangthai = 2;
+    });
+    
+    
+    $(document).on('click', "button[name='btnHide']", function () {
+        $('#frmMess').empty();
+        $('#frmMess').append('<p>Bạn có chắc chắn ẩn bài đăng</p>');
+        $('#modalDuyet').show();
+        ma = $(this).attr('id');
+        capnhattrangthai = 3;
+    });
+    $(document).on('click', "button[name='btnHienThi']", function () {
+        $('#frmMess').empty();
+        $('#frmMess').append('<p>Bạn có chắc chắn hiển thị lại bài đăng</p>');
+        $('#modalDuyet').show();
+        ma = $(this).attr('id');
+        capnhattrangthai = 0;
+    });
+    $('#btnDongY').click(function () {
+        $.ajax({
+            type: 'post',
+            url: '/Home/UpdateTrangThai',
+            data: {
+                trangthai: capnhattrangthai,
+                mabaidang: ma,
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    alert("Thao tác thành công!");
+                    location.reload();
+                    //$('#modalDuyet').hide();
+
+                }
+            }
+
+        });
+
     });
 </script>

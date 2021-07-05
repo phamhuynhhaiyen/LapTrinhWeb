@@ -5,7 +5,7 @@
 }
 
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<section class="py-3">
+<section class="py-3" style="margin-top:10%">
     <div class="container">
         <div class="row" style="background-color:#fff; margin:1px; padding:3rem">
             <div class="col-6">
@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-6">
                         <h5 style="font-weight:700; margin-top:0">@Model.TaiKhoan.TenNguoiDung</h5>
-                        <a href="#" style="color:#0094ff">Xem trang cá nhân</a>
+                        <a href="/TinDang/TrangCaNhan/@Model.TaiKhoan.Username" style="color:#0094ff">Xem trang cá nhân</a>
                     </div>
 
                 </div>
@@ -70,7 +70,39 @@
                         CHAT VỚI NGƯỜI BÁN
                     </button>
                 </div>
-
+                <div class="row" style="margin-top:2rem">
+                    <table class="table table-borderless">
+                        <tbody>
+                                                     
+                            <tr>
+                                <th scope="row" width="40%">Loại sản phẩm</th>
+                                <td>@Model.LoaiSanPham.TenLoaiSP</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tình trạng</th>
+                                @if (Model.TinhTrang == false)
+                                {
+                                    <td>Đã sử dụng</td>
+                                }
+                                else
+                                {
+                                    <td>Mới</td>
+                                }
+                            </tr>
+                            <tr>
+                                <th scope="row">Ngày đăng</th>
+                                <td>@Model.NgayDang</td>
+                            </tr>                           
+                            <tr>
+                                <th scope="row">Mô tả</th>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="2">@Model.MoTa</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>

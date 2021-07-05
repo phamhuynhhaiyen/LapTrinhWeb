@@ -175,12 +175,15 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TinDangController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -190,6 +193,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LoaiSanPham.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\QuangCao.cs" />
     <Compile Include="Models\RaoVatDB.cs" />
     <Compile Include="Models\sysdiagram.cs" />
     <Compile Include="Models\TaiKhoan.cs" />
@@ -199,6 +203,47 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Admin\assets\css\style-starter.css" />
+    <Content Include="Content\Admin\assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Admin\assets\images\avatar1.jpg" />
+    <Content Include="Content\Admin\assets\images\avatar2.jpg" />
+    <Content Include="Content\Admin\assets\images\avatar3.jpg" />
+    <Content Include="Content\Admin\assets\images\avatar4.jpg" />
+    <Content Include="Content\Admin\assets\images\avatar5.jpg" />
+    <Content Include="Content\Admin\assets\images\avatar6.jpg" />
+    <Content Include="Content\Admin\assets\images\avatar7.jpg" />
+    <Content Include="Content\Admin\assets\images\cart.jpg" />
+    <Content Include="Content\Admin\assets\images\content.jpg" />
+    <Content Include="Content\Admin\assets\images\dashboard.jpg" />
+    <Content Include="Content\Admin\assets\images\desk.jpg" />
+    <Content Include="Content\Admin\assets\images\down.png" />
+    <Content Include="Content\Admin\assets\images\logo.png" />
+    <Content Include="Content\Admin\assets\images\people1.jpg" />
+    <Content Include="Content\Admin\assets\images\people2.jpg" />
+    <Content Include="Content\Admin\assets\images\people3.jpg" />
+    <Content Include="Content\Admin\assets\images\people4.jpg" />
+    <Content Include="Content\Admin\assets\images\Preloader_11.gif" />
+    <Content Include="Content\Admin\assets\images\profileimg-big.jpg" />
+    <Content Include="Content\Admin\assets\images\profileimg.jpg" />
+    <Content Include="Content\Admin\assets\images\sort_asc.png" />
+    <Content Include="Content\Admin\assets\images\sort_both.png" />
+    <Content Include="Content\Admin\assets\images\sort_desc.png" />
+    <Content Include="Content\Admin\assets\images\team.jpg" />
+    <Content Include="Content\Admin\assets\images\team2.jpg" />
+    <Content Include="Content\Admin\assets\images\team3.jpg" />
+    <Content Include="Content\Admin\assets\images\team4.jpg" />
+    <Content Include="Content\Admin\assets\images\template1.jpg" />
+    <Content Include="Content\Admin\assets\images\template2.jpg" />
+    <Content Include="Content\Admin\assets\js\bar.js" />
+    <Content Include="Content\Admin\assets\js\bootstrap.min.js" />
+    <Content Include="Content\Admin\assets\js\Chart.min.js" />
+    <Content Include="Content\Admin\assets\js\jquery-1.10.2.min.js" />
+    <Content Include="Content\Admin\assets\js\jquery-3.3.1.min.js" />
+    <Content Include="Content\Admin\assets\js\jquery.nicescroll.js" />
+    <Content Include="Content\Admin\assets\js\linechart.js" />
+    <Content Include="Content\Admin\assets\js\modernizr.js" />
+    <Content Include="Content\Admin\assets\js\scripts.js" />
+    <Content Include="Content\Admin\assets\js\utils.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -238,6 +283,7 @@
     <Content Include="Content\img\cart-page\product-1.jpg" />
     <Content Include="Content\img\cart-page\product-2.jpg" />
     <Content Include="Content\img\cart-page\product-3.jpg" />
+    <Content Include="Content\img\delete_50px.png" />
     <Content Include="Content\img\flag-1.jpg" />
     <Content Include="Content\img\flag-2.jpg" />
     <Content Include="Content\img\footer-logo.png" />
@@ -311,6 +357,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\1-1_1523988105.jpg" />
     <Content Include="Images\anvat.jpg" />
+    <Content Include="Images\facebook_f_20px.png" />
+    <Content Include="Images\flower_doodle_25px.png" />
+    <Content Include="Images\google_20px.png" />
     <Content Include="Images\img_avatar.png" />
     <Content Include="lib\log4net.dll" />
     <Content Include="lib\Newtonsoft.Json.dll" />
@@ -328,6 +377,26 @@
     <Content Include="Content\fonts\themify.ttf" />
     <Content Include="Content\fonts\themify.woff" />
     <Content Include="log4net.config" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Admin\BieuDO.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\DanhMuc.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\DSBaiViet.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\DuyetBaiViet.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\layoutAdmin.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\LoaiSP.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\SuaDanhMuc.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\SuaLoaiSP.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\ThemDanhMuc.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\ThemLoaiSP.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\XoaDanhMuc.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\XoaLoaiSP.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Content\Admin\assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\Admin\assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\Admin\assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\Admin\assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\Admin\assets\fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -377,11 +446,14 @@
     <Content Include="Views\Home\QuanLyTin.cshtml" />
     <Content Include="Views\Home\BaiDang.cshtml" />
     <Content Include="Views\Chat\Chat.cshtml" />
+    <Content Include="Views\TinDang\DSTinDang.cshtml" />
+    <Content Include="Views\Home\returnUrl.cshtml" />
+    <Content Include="Views\TinDang\TrangCaNhan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\QuanLiTin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

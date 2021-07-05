@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -45,13 +46,29 @@ namespace WebsiteRaoVat.Controllers
                 baidang.Gia = Gia;
                 baidang.TinhTrang = TinhTrang;
                 baidang.MoTa = MoTa;
-                baidang.HinhAnh = Hinh;
-                baidang.HinhAnh1 = Hinh1;
-                baidang.HinhAnh2 = Hinh2;
-                baidang.HinhAnh3 = Hinh3;
-                baidang.HinhAnh4 = Hinh4;
+                if (Hinh != "NULL")
+                {
+                    baidang.HinhAnh = Hinh;
+                }               
+                if(Hinh1 != "NULL")
+                {
+                    baidang.HinhAnh1 = Hinh1;
+                }
+                if (Hinh2 != "NULL")
+                {
+                    baidang.HinhAnh2 = Hinh2;
+                }
+                if (Hinh3 != "NULL")
+                {
+                    baidang.HinhAnh3 = Hinh3;
+                }
+                if (Hinh4 != "NULL")
+                {
+                    baidang.HinhAnh4 = Hinh4;
+                }              
                 baidang.Username = taikhoan.Username;
-                baidang.TrangThai = 0;
+                baidang.TrangThai = 2;
+                baidang.NgayDang = DateTime.Now;
                 db.BaiDangs.Add(baidang);
                 db.SaveChanges();
                 return Json(new { code = 200, msg = "Đăng thành công" }, JsonRequestBehavior.AllowGet);
@@ -80,7 +97,10 @@ namespace WebsiteRaoVat.Controllers
         public ActionResult Menu()
         {
             TaiKhoan taikhoan = (TaiKhoan) Session["TaiKhoan"];
-            
+            if(taikhoan != null)
+            {
+                ViewBag.Username = taikhoan.Username;
+            }
             return PartialView();
         }
         public ActionResult QuanLyTin()
@@ -94,8 +114,29 @@ namespace WebsiteRaoVat.Controllers
             try
             {
                 TaiKhoan taikhoan = (TaiKhoan)Session["TaiKhoan"];
-                var lstbaidang = (from b in db.BaiDangs where b.TrangThai == TrangThai &&b.Username == taikhoan.Username select new { MaBaiDang = b.MaBaiDang, TieuDe = b.TieuDe, Gia = b.Gia, HinhAnh = b.HinhAnh }).ToList();
-                return Json(new { code = 200, lstBaiDang = lstbaidang }, JsonRequestBehavior.AllowGet);
+                //Lấy bài đăng theo trạng thái
+                var lstbaidang = (from b in db.BaiDangs where b.TrangThai == TrangThai &&b.Username == taikhoan.Username select new { MaBaiDang = b.MaBaiDang, TieuDe = b.TieuDe, Gia = b.Gia, HinhAnh = b.HinhAnh, TrangThai = b.TrangThai }).ToList();
+                //Lấy bài đăng còn hạn quảng cáo
+                var listqc = (from tin in db.QuangCaos
+                              where DateTime.Compare(DateTime.Now, (DateTime)tin.NgayHetHan) == -1
+                              select tin).ToList();
+                //var query = from person in people
+                //            join pet in pets on person equals pet.Owner into gj
+                //            from subpet in gj.DefaultIfEmpty()
+                //            select new { person.FirstName, PetName = subpet?.Name ?? String.Empty };
+                var lstGop = (from baidang in lstbaidang
+                              join quangcao in listqc on baidang.MaBaiDang equals quangcao.MaBaiDang into gr
+                              from gop in gr.DefaultIfEmpty()
+                              select new {
+                                  MaBaiDang = baidang.MaBaiDang,
+                                  TieuDe = baidang.TieuDe,
+                                  Gia = baidang.Gia,
+                                  HinhAnh = baidang.HinhAnh,
+                                  TrangThai = baidang.TrangThai,
+                                  NgayHetHan = gop?.NgayHetHan ?? null
+                              }).ToList();
+                Console.WriteLine(lstGop);
+                return Json(new { code = 200, lstBaiDang = lstGop }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -107,7 +148,7 @@ namespace WebsiteRaoVat.Controllers
         {
             try
             {
-                var lstbaidang = (from b in db.BaiDangs where b.TrangThai == 0 select new { MaBaiDang = b.MaBaiDang, TieuDe = b.TieuDe, Gia = b.Gia, HinhAnh = b.HinhAnh }).ToList();
+                var lstbaidang = (from b in db.BaiDangs where b.TrangThai == 0 orderby b.NgayDang descending select new { MaBaiDang = b.MaBaiDang, TieuDe = b.TieuDe, Gia = b.Gia, HinhAnh = b.HinhAnh, NgayDang = b.NgayDang }).ToList();
                 return Json(new { code = 200, lstBaiDang = lstbaidang }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -115,25 +156,41 @@ namespace WebsiteRaoVat.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
+        public JsonResult UpdateTrangThai(int trangthai, int mabaidang)
+        {
+            try
+            {
+                var baidang = (from c in db.BaiDangs where c.MaBaiDang == mabaidang select c).FirstOrDefault();
+                baidang.TrangThai = trangthai;
+                db.SaveChanges();
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult BaiDang(int id)
         {
             BaiDang baidang = db.BaiDangs.Where(x => x.MaBaiDang == id).FirstOrDefault();
             return View(baidang);
         }
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public void ThanhToanMomo(int tongtien)
+        public static string serectkey;
+        public static string amount;
+        public void ThanhToanMomo(int tongtien, int mabaidang)
         {
             //request params need to request to MoMo system
             string endpoint = "https://payment.momo.vn/gw_payment/transactionProcessor";
             string partnerCode = "MOMODDI520210624";
             string accessKey = "xryFOk958utQJR3T";
-            string serectkey = "art4TPJhFphYnpVLIDX9pIWKcXybGJw3";
+            //string serectkey = "art4TPJhFphYnpVLIDX9pIWKcXybGJw3";
+            serectkey = "art4TPJhFphYnpVLIDX9pIWKcXybGJw3";
             string orderInfo = "Mua quảng cáo";
-            string returnUrl = "https://localhost:44349/Home/QuanLyTin";
-            string notifyurl = "https://momo.vn/notify";
+            string returnUrl = "https://localhost:44349/Home/returnUrl/"+mabaidang;
+            string notifyurl = "https://localhost:44349/Home/notifyurl";
 
-            string amount = ""+ tongtien;
+            amount = ""+ tongtien;
             string orderid = Guid.NewGuid().ToString();
             string requestId = Guid.NewGuid().ToString();
             string extraData = "";
@@ -173,15 +230,130 @@ namespace WebsiteRaoVat.Controllers
                 { "signature", signature }
 
             };
-            log.Debug("Json request to MoMo: " + message.ToString());
+            //log.Debug("Json request to MoMo: " + message.ToString());
             string responseFromMomo = PaymentRequest.sendPaymentRequest(endpoint, message.ToString());
 
             JObject jmessage = JObject.Parse(responseFromMomo);
-            log.Debug("Return from MoMo: " + jmessage.ToString());
+            //log.Debug("Return from MoMo: " + jmessage.ToString());
 
             //yes...
             System.Diagnostics.Process.Start(jmessage.GetValue("payUrl").ToString());
         }
+        public ActionResult returnUrl(int id)
+        {
+            string param = Request.QueryString.ToString().Substring(0, Request.QueryString.ToString().IndexOf("signature") - 1);
+            //log.Debug(param);
+            param = Server.UrlDecode(param);
+            MoMoSecurity crypto = new MoMoSecurity();
+            //string serectkey = ConfigurationManager.AppSettings["serectkey"].ToString();
+            string serectKey = serectkey.ToString();
+            string signature = crypto.signSHA256(param, serectKey);
+            if (signature != Request["signature"].ToString())
+            {
+                ViewBag.Message = "Thông tin không hợp lệ!";
+                return View();
+            }
+            if (!Request.QueryString["errorCode"].Equals("0"))
+            {
+                ViewBag.Message = "Thanh toán thất bại!";
+                return View();
+            }
+            else
+            {
+                DateTime now = DateTime.Now;
+                DateTime ngayhethan = new DateTime();
+                if (amount == "1000")
+                {
+                    ngayhethan = now.AddDays(1);
+                }
+                else if (amount == "3000")
+                {
+                    ngayhethan = now.AddDays(3);
+                }
+                else if (amount == "5000")
+                {
+                    ngayhethan = now.AddDays(5);
+                }
+                QuangCao qc = new QuangCao();
+                qc.NgayMua = now;
+                qc.SoTien = int.Parse(amount);
+                qc.MaBaiDang = id;
+                qc.NgayHetHan = ngayhethan;
+                db.QuangCaos.Add(qc);
+                db.SaveChanges();
+                ViewBag.Message = "Thanh toán thành công!";
+            }
+            return View();
+        }
+        public JsonResult notifyurl(int id)
+        {
+            //string param = "";
+            //param = "partnerCode=" + Request["partnerCcode"] +"&accessKey=" + Request["accessKey"]+               
+            //  "&amount=" + Request["amount"] +
+            //  "&orderId=" + Request["orderId"] +
+            //  "&orderInfo=" + Request["orderInfo"]+
+            //  "&orderType=" + Request["orderType"] +
+            //  "&transId=" + Request["transId"] +
+            //  "&message="+ Request["message"]+
+            //  "&responseTime=" + Request["responseTime"]
+            //  + "&errorCode" + Request["errorCode"];
+            //param = Server.UrlDecode(param);
+            //MoMoSecurity crypto = new MoMoSecurity();
+            //string serectKey = serectkey.ToString();
+            //string signature = crypto.signSHA256(param, serectKey);
+            //if (signature != Request["signature"].ToString())
+            //{
+
+            //}
+            //string errorCode = Request["errorCode"].ToString();
+            //if(errorCode != "0")
+            //{
+            //    //That bai
+            //}
+            //else
+            //{
+            //    //Thanh cong
+            //    DateTime now = DateTime.Now;
+            //    DateTime ngayhethan = new DateTime();
+            //    if(amount == "1000")
+            //    {
+            //        ngayhethan = now.AddDays(1);
+            //    }else if(amount == "3000")
+            //    {
+            //        ngayhethan = now.AddDays(3);
+            //    }
+            //    else if (amount == "5000")
+            //    {
+            //        ngayhethan = now.AddDays(5);
+            //    }
+            //    QuangCao qc = new QuangCao();
+            //    qc.MaBaiDang = id;
+            //    qc.NgayHetHan = ngayhethan;
+            //    db.QuangCaos.Add(qc);
+            //    db.SaveChanges();
+            //}
+            //Thanh cong
+            DateTime now = DateTime.Now;
+            DateTime ngayhethan = new DateTime();
+            if (amount == "1000")
+            {
+                ngayhethan = now.AddDays(1);
+            }
+            else if (amount == "3000")
+            {
+                ngayhethan = now.AddDays(3);
+            }
+            else if (amount == "5000")
+            {
+                ngayhethan = now.AddDays(5);
+            }
+            QuangCao qc = new QuangCao();
+            qc.MaBaiDang = id;
+            qc.NgayHetHan = ngayhethan;
+            db.QuangCaos.Add(qc);
+            db.SaveChanges();
+            return Json(new { code = 200}, JsonRequestBehavior.AllowGet);
+        }
     }
-   
+    
 }

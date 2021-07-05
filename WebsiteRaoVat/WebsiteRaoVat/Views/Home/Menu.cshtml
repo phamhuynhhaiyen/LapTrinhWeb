@@ -1,4 +1,5 @@
-﻿<div class="container">
+﻿
+<div class="container">
     <div class="inner-header">
         <div class="row">
             <div class="col-lg-7 col-md-7">
@@ -16,9 +17,9 @@
                         @if (Session["TaiKhoan"] != null)
                         {
                             WebsiteRaoVat.Models.TaiKhoan taikhoan = (WebsiteRaoVat.Models.TaiKhoan)Session["TaiKhoan"];
-                            <button class="primary-btn" style="background-color:#000000">
+                            <a href="/TinDang/TrangCaNhan/@taikhoan.Username" class="primary-btn" style="background-color: #000000; color: #fff; border: solid 2px #000000; cursor:pointer">
                                 @taikhoan.TenNguoiDung
-                            </button>
+                            </a>
                             <input hidden id="session" value="1" />
                         }
                         else
@@ -32,9 +33,6 @@
                         <button id="btnDangTin" class="primary-btn" style="margin-left:20px; border: solid 2px #e7ab3c">
                             Đăng tin
                         </button>
-
-
-
                     </li>
                 </ul>
             </div>
@@ -75,4 +73,19 @@
             $("#popup_login").show();
         }
     });
+    var i = 1;
+    $("#clickaa").click(function () {
+        if ($("#session").val() == 1) {
+            if (i % 2 != 0) {
+                $(this).find('.dropdown-content').css({ 'display': 'block' });
+            } else {
+                $(this).find('.dropdown-content').css({ 'display': 'none' });
+            }
+            i = i + 1;
+
+        } else {
+            $("#popup_login").show();
+        }
+
+    })
 </script>

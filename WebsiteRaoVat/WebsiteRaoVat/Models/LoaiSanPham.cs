@@ -23,6 +23,9 @@ namespace WebsiteRaoVat.Models
 
         public int? MaDanhMuc { get; set; }
 
+        [Column(TypeName = "text")]
+        public string Hinh { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BaiDang> BaiDangs { get; set; }
 

@@ -1,10 +1,10 @@
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Linq;
+
 namespace WebsiteRaoVat.Models
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-
     public partial class RaoVatDB : DbContext
     {
         public RaoVatDB()
@@ -15,6 +15,7 @@ namespace WebsiteRaoVat.Models
         public virtual DbSet<BaiDang> BaiDangs { get; set; }
         public virtual DbSet<DanhMuc> DanhMucs { get; set; }
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; }
+        public virtual DbSet<QuangCao> QuangCaos { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
 
@@ -28,6 +29,22 @@ namespace WebsiteRaoVat.Models
                 .Property(e => e.HinhAnh)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<BaiDang>()
+                .Property(e => e.HinhAnh1)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<BaiDang>()
+                .Property(e => e.HinhAnh2)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<BaiDang>()
+                .Property(e => e.HinhAnh3)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<BaiDang>()
+                .Property(e => e.HinhAnh4)
+                .IsUnicode(false);
+
             modelBuilder.Entity<DanhMuc>()
                 .Property(e => e.Hinh)
                 .IsUnicode(false);
@@ -36,6 +53,10 @@ namespace WebsiteRaoVat.Models
                 .HasMany(e => e.LoaiSanPhams)
                 .WithOptional(e => e.DanhMuc)
                 .WillCascadeOnDelete();
+
+            modelBuilder.Entity<LoaiSanPham>()
+                .Property(e => e.Hinh)
+                .IsUnicode(false);
 
             modelBuilder.Entity<LoaiSanPham>()
                 .HasMany(e => e.BaiDangs)
