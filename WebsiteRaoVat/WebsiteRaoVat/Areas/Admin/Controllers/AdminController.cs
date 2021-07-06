@@ -99,36 +99,26 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult ThemDanhMuc(DanhMuc dm, HttpPostedFileBase Hinh)
+        public JsonResult AddDanhMuc(string TieuDe, string Hinh)
         {
-            ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
-            ViewBag.tongbaiviet = sobaiviet();
-            ViewBag.tongsl = Songuoithamgia();
-            if (Hinh.ContentLength > 0)
+            try
             {
-                var filename = Path.GetFileName(Hinh.FileName);
-                var path = Path.Combine(Server.MapPath("~/Images/"), filename);
-                //if (System.IO.File.Exists(path))
-                //{
-                //    ViewBag.upload("Hình ảnh đã tồn tại");
-                //    return View();
-                //}
-                ////chưa có thì thêm vào
-                //else
-                //{
-                if (System.IO.File.Exists(path))
+                DanhMuc danhMuc = new DanhMuc();
+                danhMuc.TenDanhMuc = TieuDe;
+                if (Hinh != "NULL")
                 {
-                    System.IO.File.Delete(path);
+                    danhMuc.Hinh = Hinh;
                 }
-                Hinh.SaveAs(path);
-                dm.Hinh = "/Images/"+filename;
-
-                //}
+                db.DanhMucs.Add(danhMuc);
+                db.SaveChanges();
+                return Json(new { code = 200, msg = "Đăng thành công" }, JsonRequestBehavior.AllowGet);
             }
-            db.DanhMucs.Add(dm);
-            db.SaveChanges();
-            return RedirectToAction("DanhMuc");
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
+        
         [ValidateInput(false)]
         [HttpGet]
         public ActionResult SuaDanhMuc(int? id)
@@ -152,32 +142,48 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult SuaDanhMuc(DanhMuc dm)
+        public JsonResult SuaDM(int madanhmuc, string Ten, string Hinh )
         {
             
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(dm).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("DanhMuc");
-            }
-            return View(dm);
-        }
+                var danhmuc = (from c in db.DanhMucs where c.MaDanhMuc == madanhmuc select c).FirstOrDefault();
 
-       
-        
+                danhmuc.TenDanhMuc = Ten;
+                if (Hinh != "NULL")
+                {
+                    danhmuc.Hinh = Hinh;
+                }
+                db.DanhMucs.Add(danhmuc);
+                db.Entry(danhmuc).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //public ActionResult SuaDanhMuc(DanhMuc dm)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(dm).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("DanhMuc");
+        //    }
+        //    return View(dm);
+        //}
+
+
         [HttpGet]
-        public ActionResult XoaDanhMuc(int? id)
+        public ActionResult XoaDanhMuc(int madanhmuc)
         {
-            ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
+            
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
-            if (id == null)
-            {
-                Response.StatusCode = 404;
-                return View();
-            }
-            DanhMuc dm = db.DanhMucs.SingleOrDefault(c => c.MaDanhMuc == id);
+            DanhMuc dm = db.DanhMucs.SingleOrDefault(c => c.MaDanhMuc == madanhmuc);
             if (dm == null)
             {
                 return HttpNotFound();
@@ -186,26 +192,42 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
 
             return View(dm);
         }
-        [ValidateInput(false)]
+        
         [HttpPost]
-        public ActionResult XoaDanhMuc(int id)
+        public JsonResult XoaDanhMucSanPham(int madanhmuc)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-
+                var dm = (from c in db.DanhMucs where c.MaDanhMuc == madanhmuc select c).FirstOrDefault();
+                db.DanhMucs.Remove(dm);
+                db.SaveChanges();
+                
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
-            DanhMuc dm = db.DanhMucs.SingleOrDefault(c => c.MaDanhMuc == id);
-            if (dm == null)
+            catch (Exception e)
             {
-                return HttpNotFound();
+                return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
-            db.DanhMucs.Remove(dm);
-            db.SaveChanges();
-            return RedirectToAction("DanhMuc");
-
         }
+
+        //public ActionResult XoaDanhMuc(int id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+
+        //    }
+        //    DanhMuc dm = db.DanhMucs.SingleOrDefault(c => c.MaDanhMuc == id);
+        //    if (dm == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    db.DanhMucs.Remove(dm);
+        //    db.SaveChanges();
+        //    return RedirectToAction("DanhMuc");
+
+        //}
 
 
 
@@ -229,33 +251,28 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult ThemLoaiSP(LoaiSanPham loaisp, HttpPostedFileBase Hinh)
+        public JsonResult AddLoaiSP(int MaDanhMuc, string TieuDe, string Hinh)
         {
-            if (Hinh.ContentLength > 0)
+            try
             {
-                var filename = Path.GetFileName(Hinh.FileName);
-                var path = Path.Combine(Server.MapPath("/Images/"), filename);
-                //if (System.IO.File.Exists(path))
-                //{
-                //    ViewBag.upload("Hình ảnh đã tồn tại");
-                //    return View();
-                //}
-                ////chưa có thì thêm vào
-                //else
-                //{
-                if (System.IO.File.Exists(path))
+                LoaiSanPham loaiSanPham = new LoaiSanPham();
+                loaiSanPham.TenLoaiSP = TieuDe;
+                loaiSanPham.MaDanhMuc = MaDanhMuc;
+               
+                if (Hinh != "NULL")
                 {
-                    System.IO.File.Delete(path);
+                    loaiSanPham.Hinh = Hinh;
                 }
-                Hinh.SaveAs(path);
-                    loaisp.Hinh = "/Images/"+ filename;
-
-                //}
+                db.LoaiSanPhams.Add(loaiSanPham);
+                db.SaveChanges();
+                return Json(new { code = 200, msg = "Đăng thành công" }, JsonRequestBehavior.AllowGet);
             }
-            db.LoaiSanPhams.Add(loaisp);
-            db.SaveChanges();
-            return RedirectToAction("LoaiSP");
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
+
         [ValidateInput(false)]
         [HttpGet]
         public ActionResult SuaLoaiSP(int? id)
@@ -263,7 +280,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
-            ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc");
+            
             if (id == null)
             {
                 Response.StatusCode = 404;
@@ -280,17 +297,28 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult SuaLoaiSP(LoaiSanPham loaiSP)
+        public JsonResult UpdateLoaiSP(int maloai, int MaDanhMuc, string Hinh, string Ten)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(loaiSP).State = System.Data.Entity.EntityState.Modified;
+                var loaiSanPham = (from c in db.LoaiSanPhams where c.MaLoaiSP == maloai select c).FirstOrDefault();
+                loaiSanPham.MaDanhMuc = MaDanhMuc;
+                loaiSanPham.TenLoaiSP = Ten;
+                if(Hinh != null)
+                {
+                    loaiSanPham.Hinh = Hinh;
+                }
+                db.LoaiSanPhams.Add(loaiSanPham);
+                db.Entry(loaiSanPham).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("LoaiSP");
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
-            return View(loaiSP);
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
-
+        
         [HttpGet]
         public ActionResult XoaLoaiSP(int? id)
         {
@@ -315,24 +343,21 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         }
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult XoaLoaiSP(int id)
+        public JsonResult DeleteLoaiSP(int maloaiSP)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-
+                var loaiSP = (from c in db.LoaiSanPhams where c.MaLoaiSP == maloaiSP select c).FirstOrDefault();
+                db.LoaiSanPhams.Remove(loaiSP);
+                db.SaveChanges();
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
-            LoaiSanPham loaiSP = db.LoaiSanPhams.SingleOrDefault(c => c.MaLoaiSP == id);
-            if (loaiSP == null)
+            catch (Exception e)
             {
-                return HttpNotFound();
+                return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
-            db.LoaiSanPhams.Remove(loaiSP);
-            db.SaveChanges();
-            return RedirectToAction("LoaiSP");
-
         }
+        
         public ActionResult DSBaiViet()
         {
             //ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
@@ -566,6 +591,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
      
             return Thang12;
         }
+
         
     }
 }

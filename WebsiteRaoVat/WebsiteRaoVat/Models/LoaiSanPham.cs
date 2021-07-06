@@ -1,4 +1,4 @@
-namespace WebsiteRaoVat.Models
+﻿namespace WebsiteRaoVat.Models
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +19,7 @@ namespace WebsiteRaoVat.Models
         public int MaLoaiSP { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Tên loại sản phẩm:")]
         public string TenLoaiSP { get; set; }
 
         public int? MaDanhMuc { get; set; }

@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "DanhMuc";
     Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
-    WebGrid webGrid = new WebGrid(source:Model, rowsPerPage: 5);
+    
 }
 
 <nav aria-label="breadcrumb">
@@ -14,69 +14,148 @@
     </ol>
 </nav>
 
+<div class="row" style="margin:1rem; background-color:#fff">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Tên danh mục</th>
+                <th scope="col">Hình ảnh</th>
 
-<div class="grid-product">
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="@item.MaDanhMuc">
+                    <td>@item.TenDanhMuc</td>
+                    <td><img src="@item.Hinh" width="70" height="70" alt="" /></td>
+                    <td>
+                        <a class="btn btn-xs btn-success text-white" href="/Admin/Admin/SuaDanhMuc/@item.MaDanhMuc">Sửa</a>
+                        <button class="btn btn-xs btn-danger text-white" name="btnXoaDanhMuc">Xóa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal" id="modalThongBao">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận</h5>
+                <button type="button" class="close" onclick="modalClose()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="btnMess">
 
-    @webGrid.GetHtml(
-        tableStyle: "tablesp",
-        headerStyle: "gridhead",
-        footerStyle: "gridfooter",
-        rowStyle: "gridrow",
-        alternatingRowStyle: "gridaltrow",
-        columns: webGrid.Columns(
-            webGrid.Column("MaDanhMuc", "Mã danh mục", style: "id1"),
-            webGrid.Column("TenDanhMuc", "Tên danh mục", style: "id"),
-            webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
-          
-            webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaDanhMuc", new { id = c.MaDanhMuc })),
-            webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaDanhMuc", new { id = c.MaDanhMuc }))
-           ))
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDongYXoa">Đồng ý</button>
+                <button type="button" class="btn btn-secondary" onclick="modalClose()">Đóng</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<style>
+@section Jsfooter{
+    <script>
+        var trangthai = 2;
+        var ma;
 
 
-    .tablesp {
-        width: 1100px;
-        color: blue;
-        border: 1px solid #ed71a3;
-        display: table;
-        margin-left: 50px;
-        margin-bottom: 20px;
-        background-color: #fff;
-    }
+        function modalClose() {
+            $('#modalThongBao').hide();
 
-    .gridhead {
-        background-color: blue;
-     
-        height: 50px;
-    }
+        }
+        $(document).on('click', "button[name='btnXoaDanhMuc']", function () {
+            $('#btnMess').empty();
+            $('#btnMess').append('<p>Bạn chắc chắn xóa danh mục?</p>');
+            $('#modalThongBao').show();
+            trangthai = 1;
+            ma = $(this).closest('tr').attr('id');
+        });
+        $('#btnDongYXoa').click(function () {
+            $.ajax({
+                type: 'post',
+                url: '/Admin/Admin/XoaDanhMucSanPham',
+                data: {
 
-        .gridhead > th > a {
-            color: white;
-             text-align:center;
-            display: table-cell;
+                    madanhmuc: ma,
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        location.reload();
+                    }
+                }
+
+            });
+        });
+    </script>
+}
+@*<div class="grid-product">
+
+        @webGrid.GetHtml(
+            tableStyle: "tablesp",
+            headerStyle: "gridhead",
+            footerStyle: "gridfooter",
+            rowStyle: "gridrow",
+            alternatingRowStyle: "gridaltrow",
+            columns: webGrid.Columns(
+                webGrid.Column("MaDanhMuc", "Mã danh mục", style: "id1"),
+                webGrid.Column("TenDanhMuc", "Tên danh mục", style: "id"),
+                webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
+
+                webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaDanhMuc", new { id = c.MaDanhMuc })),
+                webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaDanhMuc", new { id = c.MaDanhMuc }))
+               ))
+    </div>*@
+
+@*<style>
+
+
+        .tablesp {
+            width: 1100px;
+            color: blue;
+            border: 1px solid #ed71a3;
+            display: table;
+            margin-left: 50px;
+            margin-bottom: 20px;
+            background-color: #fff;
         }
 
-    .gridaltrow {
-        border: solid;
-        height: 150px
-    }
+        .gridhead {
+            background-color: blue;
 
-    .gridrow {
-        border: solid;
-        height: 150px
-    }
+            height: 50px;
+        }
 
-    .id {
-        display: table-cell;
-      
-    }
-    .id1 {
-        display: table-cell;
-       
-      
-    }
+            .gridhead > th > a {
+                color: white;
+                 text-align:center;
+                display: table-cell;
+            }
 
-   
-</style>
+        .gridaltrow {
+            border: solid;
+            height: 150px
+        }
+
+        .gridrow {
+            border: solid;
+            height: 150px
+        }
+
+        .id {
+            display: table-cell;
+
+        }
+        .id1 {
+            display: table-cell;
+
+
+        }
+
+
+    </style>*@

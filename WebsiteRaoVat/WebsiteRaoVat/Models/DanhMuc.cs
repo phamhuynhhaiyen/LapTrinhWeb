@@ -1,4 +1,4 @@
-namespace WebsiteRaoVat.Models
+﻿namespace WebsiteRaoVat.Models
 {
     using System;
     using System.Collections.Generic;
@@ -19,9 +19,11 @@ namespace WebsiteRaoVat.Models
         public int MaDanhMuc { get; set; }
 
         [StringLength(50)]
+        [Display(Name = "Tên danh mục:")]
         public string TenDanhMuc { get; set; }
 
         [Column(TypeName = "text")]
+        [Display(Name = "Hình ảnh:")]
         public string Hinh { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

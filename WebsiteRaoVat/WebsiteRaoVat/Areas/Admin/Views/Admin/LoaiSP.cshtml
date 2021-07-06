@@ -12,66 +12,154 @@
         <li class="breadcrumb-item active" aria-current="page"><a href="#">Loại sản phẩm</a></li>
     </ol>
 </nav>
+<div class="row" style="margin:1rem; background-color:#fff">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Loại sản phẩm</th>
+                <th scope="col">Danh mục</th>
+                <th scope="col">Hình ảnh</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="@item.MaLoaiSP">
+                    <td>@item.TenLoaiSP</td>
+                    <td>@item.DanhMuc.TenDanhMuc</td>
+                    <td><img src="@item.Hinh" width="70" height="70" alt="" /></td>
+                    <td>
+                        <a class="btn btn-xs btn-success text-white" href="/Admin/Admin/SuaLoaiSP/@item.MaLoaiSP">Sửa</a>
+                        <button class="btn btn-xs btn-danger text-white" name="btnTuchoi">Xóa</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal" id="modalDuyet">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận</h5>
+                <button type="button" class="close" onclick="modalClose()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="btnMess">
 
-<div class="grid-product">
-
-    @webGrid.GetHtml(
-        tableStyle: "tablesp",
-        headerStyle: "gridhead",
-        footerStyle: "gỉdfooter",
-        rowStyle: "gridrow",
-        alternatingRowStyle: "gridaltrow",
-        columns: webGrid.Columns(
-            webGrid.Column("MaLoaiSP", "Mã loại sản phẩm", style: "id1"),
-            webGrid.Column("TenLoaiSP", "Tên loại sản phẩm", style: "id"),
-           
-            webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
-
-            webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaLoaiSP", new { id = c.MaLoaiSP})),
-            webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaLoaiSP", new { id = c.MaLoaiSP }))
-           ))
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDongY">Đồng ý</button>
+                <button type="button" class="btn btn-secondary" onclick="modalClose()">Đóng</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<style>
+@section Jsfooter{
+    <script>
+        var trangthai = 2;
+        var ma;
+        $(document).on('click', "button[name='btnDuyet']", function () {
+            $('#btnMess').empty();
+            $('#btnMess').append('<p>Bạn chắc chắn duyệt bài viết</p>');
+            $('#modalDuyet').show();
+            trangthai = 0;
+            ma = $(this).closest('tr').attr('id');
+
+        });
+
+        function modalClose() {
+            $('#modalDuyet').hide();
+
+        }
+        $(document).on('click', "button[name='btnTuchoi']", function () {
+            $('#btnMess').empty();
+            $('#btnMess').append('<p>Bạn chắc chắn xóa loại sản phẩm</p>');
+            $('#modalDuyet').show();
+            trangthai = 1;
+            ma = $(this).closest('tr').attr('id');
+        });
+        $('#btnDongY').click(function () {
+            $.ajax({
+                type: 'post',
+                url: '/Admin/Admin/DeleteLoaiSP',
+                data: {
+                    
+                    maloaiSP: ma,
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        location.reload();
+                    }
+                }
+
+            });
+        });
+    </script>
+}
+
+@*<div class="grid-product">
+
+        @webGrid.GetHtml(
+            tableStyle: "tablesp",
+            headerStyle: "gridhead",
+            footerStyle: "gỉdfooter",
+            rowStyle: "gridrow",
+            alternatingRowStyle: "gridaltrow",
+            columns: webGrid.Columns(
+                webGrid.Column("MaLoaiSP", "Mã loại sản phẩm", style: "id1"),
+                webGrid.Column("TenLoaiSP", "Tên loại sản phẩm", style: "id"),
+
+                webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
+
+                webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaLoaiSP", new { id = c.MaLoaiSP})),
+                webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaLoaiSP", new { id = c.MaLoaiSP }))
+               ))
+    </div>
+
+    <style>
 
 
-    .tablesp {
-        width: 1100px;
-        color: blue;
-        border: 1px solid #ed71a3;
-        display: table;
-          margin-left:50px;
-        margin-bottom:20px;
-     
-    }
+        .tablesp {
+            width: 1100px;
+            color: blue;
+            border: 1px solid #ed71a3;
+            display: table;
+              margin-left:50px;
+            margin-bottom:20px;
 
-    .gridhead {
-        background-color: blue;
-        height: 50px;
-    }
+        }
 
-        .gridhead > th > a {
-            color: white;
-            text-align: center;
+        .gridhead {
+            background-color: blue;
+            height: 50px;
+        }
+
+            .gridhead > th > a {
+                color: white;
+                text-align: center;
+                display: table-cell;
+            }
+
+        .gridaltrow {
+            border: solid;
+            height: 150px
+        }
+
+        .gridrow {
+            border: solid;
+            height: 150px
+        }
+
+        .id {
             display: table-cell;
         }
 
-    .gridaltrow {
-        border: solid;
-        height: 150px
-    }
-
-    .gridrow {
-        border: solid;
-        height: 150px
-    }
-
-    .id {
-        display: table-cell;
-    }
-
-    .id1 {
-        display: table-cell;
-    }
-</style>
+        .id1 {
+            display: table-cell;
+        }
+    </style>*@
 

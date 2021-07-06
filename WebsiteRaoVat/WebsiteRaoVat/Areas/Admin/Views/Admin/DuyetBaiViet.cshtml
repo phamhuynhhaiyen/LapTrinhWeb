@@ -17,6 +17,7 @@
     <div class="row" style=" margin:1px; padding:3rem">
         <div class="col-5">
             <div class="w3-content w3-display-container" id="@Model.MaBaiDang" style="margin-bottom:1rem">
+                <input id="txtMaBai" value="@Model.MaBaiDang" hidden />
                 @{ var i = 0;}
                 @if (Model.HinhAnh != null)
                 {
@@ -192,8 +193,9 @@
 @section Jsfooter{
     <script>
         var trangthai = 2;
-        var ma;
+        var ma = $("#txtMaBai").val();
         $('#btnDuyet').on('click', function () {
+            trangthai = 0;
             $('#btnMess').empty();
             $('#btnMess').append('<p>Bạn chắc chắn duyệt bài viết</p>');
             $('#modalDuyet').show();
@@ -205,12 +207,14 @@
 
         }
         $('#btnTuchoi').on('click', function () {
+            trangthai = 1;
             $('#btnMess').empty();
             $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
             $('#modalDuyet').show();
-            
+
         });
         $('#btnDongY').click(function () {
+            //alert(ma);
             $.ajax({
                 type: 'post',
                 url: '/Admin/Admin/UpdateTrangThai',
@@ -220,6 +224,7 @@
                 },
                 success: function (data) {
                     if (data.code == 200) {
+                        alert("Thao tác thành công");
                         window.location = "/Admin/Admin/DSBaiViet";
                     }
                 }
