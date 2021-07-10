@@ -5,7 +5,11 @@
     Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
     WebGrid webGrid = new WebGrid(source: Model, rowsPerPage: 5);
 }
-
+@{
+    int iDem = 0;
+    int iSLDanhMucTrenTrang = 5;
+    int iTrang = 1;
+}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb my-breadcrumb">
         <li class="breadcrumb-item">Admin</li>
@@ -25,7 +29,11 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr id="@item.MaLoaiSP">
+                if (iDem % iSLDanhMucTrenTrang == 0 && iDem != 0)
+                {
+                    iTrang++;
+                }
+                <tr id="@item.MaLoaiSP" class="@Url.Content("SoTrangChua SoTrang" + iTrang.ToString())">
                     <td>@item.TenLoaiSP</td>
                     <td>@item.DanhMuc.TenDanhMuc</td>
                     <td><img src="@item.Hinh" width="70" height="70" alt="" /></td>
@@ -34,9 +42,17 @@
                         <button class="btn btn-xs btn-danger text-white" name="btnTuchoi">Xóa</button>
                     </td>
                 </tr>
+                iDem++;
             }
         </tbody>
     </table>
+    <div class="Trang">
+        Trang: 
+        @for (int i = 1; i <= iTrang; i++)
+        {
+            <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
+        }
+    </div>
 </div>
 <div class="modal" id="modalDuyet">
     <div class="modal-dialog" role="document">
@@ -57,6 +73,21 @@
         </div>
     </div>
 </div>
+
+<style>
+    .SoTrangChua {
+        display: none;
+    }
+
+    .SoTrang1 {
+        display: table-row;
+    }
+
+    a:hover {
+        color: red;
+        text-decoration: none;
+    }
+</style>
 
 @section Jsfooter{
     <script>
@@ -87,7 +118,7 @@
                 type: 'post',
                 url: '/Admin/Admin/DeleteLoaiSP',
                 data: {
-                    
+
                     maloaiSP: ma,
                 },
                 success: function (data) {
@@ -97,6 +128,11 @@
                 }
 
             });
+        });
+        $('.linkTrang').click(function () {
+            $('.SoTrangChua').hide();
+            var SoTrang = $(this).attr("data-sotrang");
+            $('.' + SoTrang).show();
         });
     </script>
 }

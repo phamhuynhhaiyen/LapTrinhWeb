@@ -144,12 +144,14 @@ namespace WebsiteRaoVat.Controllers
             }
         }
         //Để tạm thời để thiết kế layout
-        public JsonResult getDanhSachSP()
+        public JsonResult getDanhSachSP(int trang)
         {
             try
             {
                 var lstbaidang = (from b in db.BaiDangs where b.TrangThai == 0 orderby b.NgayDang descending select new { MaBaiDang = b.MaBaiDang, TieuDe = b.TieuDe, Gia = b.Gia, HinhAnh = b.HinhAnh, NgayDang = b.NgayDang }).ToList();
-                return Json(new { code = 200, lstBaiDang = lstbaidang }, JsonRequestBehavior.AllowGet);
+                var trangSP = lstbaidang.Count() % 6 == 0 ? lstbaidang.Count() / 6 : lstbaidang.Count() / 6 + 1;
+                var kqpt = lstbaidang.Skip((trang - 1) * 6).Take(6).ToList();
+                return Json(new { code = 200, trangSP = trangSP, lstBaiDang = kqpt }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

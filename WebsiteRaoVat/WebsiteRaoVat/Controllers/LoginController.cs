@@ -249,6 +249,12 @@ namespace WebsiteRaoVat.Controllers
             var user = db.TaiKhoans;
             return View(user);
         }
+
+        // đăng ký
+        public ActionResult CreateAcc()
+        {
+            return View();
+        }
     }
 
 }

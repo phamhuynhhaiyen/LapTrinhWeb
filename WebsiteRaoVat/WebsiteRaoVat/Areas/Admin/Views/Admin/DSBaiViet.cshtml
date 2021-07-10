@@ -3,9 +3,13 @@
     ViewBag.Title = "DSBaiViet";
     Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
 
-    WebGrid webGrid = new WebGrid(source:Model, rowsPerPage: 7);
+    WebGrid webGrid = new WebGrid(source: Model, rowsPerPage: 7);
 }
-
+@{
+    int iDem = 0;
+    int iSLDanhMucTrenTrang = 5;
+    int iTrang = 1;
+}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb my-breadcrumb">
         <li class="breadcrumb-item">Admin</li>
@@ -29,96 +33,45 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr id="@item.MaBaiDang">
-                <td>@item.Username</td>
-                <td>@item.LoaiSanPham.TenLoaiSP</td>
-                <td>@item.TieuDe</td>
-                <td>@item.Gia</td>
+                if (iDem % iSLDanhMucTrenTrang == 0 && iDem != 0)
+                {
+                    iTrang++;
+                }
+                <tr id="@item.MaBaiDang" class="@Url.Content("SoTrangChua SoTrang" + iTrang.ToString())">
+                    <td>@item.Username</td>
+                    <td>@item.LoaiSanPham.TenLoaiSP</td>
+                    <td>@item.TieuDe</td>
+                    <td>@item.Gia</td>
 
-                @if (item.TinhTrang == false)
-                {
-                    <td>Đã qua sử dụng</td>
-                }
-                else
-                {
-                    <td>Mới</td>
-                }
-                <td>@item.NgayDang</td>
-                <td><img src="@item.HinhAnh" width="70" height="70" alt="" /></td>
-                <td>
-                    <a class="btn btn-xs btn-info text-white" href="/Admin/Admin/DuyetBaiViet/@item.MaBaiDang">Xem</a>
-                    <button class="btn btn-xs btn-success text-white" name="btnDuyet">Duyệt</button>
-                    <button class="btn btn-xs btn-danger text-white" name="btnTuchoi">Từ chối</button>
-                </td>
-            </tr>
+                    @if (item.TinhTrang == false)
+                    {
+                        <td>Đã qua sử dụng</td>
+                    }
+                    else
+                    {
+                        <td>Mới</td>
+                    }
+                    <td>@item.NgayDang</td>
+                    <td><img src="@item.HinhAnh" width="70" height="70" alt="" /></td>
+                    <td>
+                        <a class="btn btn-xs btn-info text-white" href="/Admin/Admin/DuyetBaiViet/@item.MaBaiDang">Xem</a>
+                        <button class="btn btn-xs btn-success text-white" name="btnDuyet">Duyệt</button>
+                        <button class="btn btn-xs btn-danger text-white" name="btnTuchoi">Từ chối</button>
+                    </td>
+                </tr>
+                iDem++;
             }
         </tbody>
     </table>
-</div>
-@*<div class="grid-product">
-   
-    @webGrid.GetHtml(
-        tableStyle: "tablesp",
-        headerStyle: "gridhead",
-        footerStyle: "gỉdfooter",
-        rowStyle: "gridrow",
-        alternatingRowStyle: "gridaltrow",
-        columns: webGrid.Columns(
-            webGrid.Column("MaBaiDang", "Mã bài đăng", style: "id"),
-            webGrid.Column("Username", "Tên khách hàng", style: "id"),
-            webGrid.Column("TieuDe", "Tiêu đề", style: "id"),
-             webGrid.Column("HinhAnh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" +c.HinhAnh + "\" >")),
-            webGrid.Column("MoTa", "Mô tả", style: "id1"),
-            webGrid.Column("Gia", "Giá", style: "id"),  
-
-             webGrid.Column("TinhTrang", "Tình trạng", style: "id"),
-            webGrid.Column(format: c => @Html.ActionLink("Xem", "DuyetBaiViet", new { id = c.MaBaiDang}))
-
-           ))
-</div>
-
-<style>
-
-
-    .tablesp {
-        width: 1100px;
-        color: blue;
-        border: 1px solid #ed71a3;
-        display: table;
-        margin-left: 50px;
-        margin-bottom: 20px;
-    }
-
-    .gridhead {
-        background-color: blue;
-        height: 50px;
-    }
-
-        .gridhead > th > a {
-            color: white;
-            text-align: center;
-            display: table-cell;
+    <div class="Trang">
+        Trang: 
+        @for (int i = 1; i <= iTrang; i++)
+        {
+            <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
         }
+    </div>
+</div>
 
-    .gridaltrow {
-        border: solid;
-        height: 150px
-    }
-
-    .gridrow {
-        border: solid;
-        height: 150px
-    }
-
-    .id {
-        display: table-cell;
-        text-align:center;
-    }
-
-    .id1 {
-        display: table-cell;
-    }
-</style>*@
 <div class="modal" id="modalDuyet">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -129,7 +82,7 @@
                 </button>
             </div>
             <div class="modal-body" id="btnMess">
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnDongY">Đồng ý</button>
@@ -139,22 +92,36 @@
     </div>
 </div>
 
+<style>
+    .SoTrangChua {
+        display: none;
+    }
+
+    .SoTrang1 {
+        display: table-row;
+    }
+
+    a:hover {
+        color: red;
+        text-decoration: none;
+    }
+</style>
 @section Jsfooter{
     <script>
         var trangthai = 2;
         var ma;
-        $(document).on('click', "button[name='btnDuyet']", function () {          
+        $(document).on('click', "button[name='btnDuyet']", function () {
             $('#btnMess').empty();
             $('#btnMess').append('<p>Bạn chắc chắn duyệt bài viết</p>');
             $('#modalDuyet').show();
             trangthai = 0;
             ma = $(this).closest('tr').attr('id');
-            
+
         });
 
         function modalClose() {
             $('#modalDuyet').hide();
-           
+
         }
         $(document).on('click', "button[name='btnTuchoi']", function () {
             $('#btnMess').empty();
@@ -179,5 +146,10 @@
 
             });
         });
+        $('.linkTrang').click(function () {
+            $('.SoTrangChua').hide();
+            var SoTrang = $(this).attr("data-sotrang");
+            $('.' + SoTrang).show();
+        });
     </script>
-    }
+}

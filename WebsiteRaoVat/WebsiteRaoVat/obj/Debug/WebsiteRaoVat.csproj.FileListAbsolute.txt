@@ -220,3 +220,7 @@ C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteR
 C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.csproj.CopyComplete
 C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.dll
 C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\obj\Debug\WebsiteRaoVat.pdb
+C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\bin\PagedList.dll
+C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\bin\PagedList.xml
+C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\bin\PagedList.Mvc.dll
+C:\Users\asus\Desktop\LapTrinhWeb\WebsiteRaoVat\WebsiteRaoVat\bin\PagedList.Mvc.xml

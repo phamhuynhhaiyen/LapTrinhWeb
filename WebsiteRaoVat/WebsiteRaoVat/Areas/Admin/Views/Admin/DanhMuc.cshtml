@@ -4,9 +4,14 @@
 @{
     ViewBag.Title = "DanhMuc";
     Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
-    
+
 }
 
+@{ 
+    int iDem = 0;
+    int iSLDanhMucTrenTrang = 5;
+    int iTrang = 1;
+}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb my-breadcrumb">
         <li class="breadcrumb-item">Admin</li>
@@ -27,7 +32,11 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr id="@item.MaDanhMuc">
+                if(iDem % iSLDanhMucTrenTrang == 0 && iDem != 0)
+                {
+                    iTrang++;
+                }
+                <tr id="@item.MaDanhMuc" class="@Url.Content("SoTrangChua SoTrang" + iTrang.ToString())">
                     <td>@item.TenDanhMuc</td>
                     <td><img src="@item.Hinh" width="70" height="70" alt="" /></td>
                     <td>
@@ -35,9 +44,17 @@
                         <button class="btn btn-xs btn-danger text-white" name="btnXoaDanhMuc">Xóa</button>
                     </td>
                 </tr>
+                iDem++;
             }
         </tbody>
     </table>
+    <div class="Trang">
+        Trang: 
+        @for(int i =1; i<=iTrang; i++)
+        {
+            <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
+        }
+    </div>
 </div>
 <div class="modal" id="modalThongBao">
     <div class="modal-dialog" role="document">
@@ -58,7 +75,19 @@
         </div>
     </div>
 </div>
-
+<style>
+    .SoTrangChua{
+        display: none;
+    }
+    .SoTrang1{
+        display: table-row;
+    }
+    a:hover {
+        color: red;
+        text-decoration: none;
+    }
+    
+</style>
 @section Jsfooter{
     <script>
         var trangthai = 2;
@@ -91,6 +120,11 @@
                 }
 
             });
+        });
+        $('.linkTrang').click(function () {
+            $('.SoTrangChua').hide();
+            var SoTrang = $(this).attr("data-sotrang");
+            $('.' + SoTrang).show();
         });
     </script>
 }
