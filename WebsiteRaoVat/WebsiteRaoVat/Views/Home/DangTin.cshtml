@@ -40,16 +40,19 @@
                                 </select>
                             </div>
                             <div class="col-lg-12">
+
                                 <input accept="image/*" onchange="" id="txtimg" name="image" type="file">
                             </div>
                             <div class="col-lg-12 ">
                                 <div style="border: 2px dashed #ebebeb;border-radius: 5px; padding-left: 20px; padding-top: 10px; margin-bottom: 25px;">
-                                    <div class="row">
-                                        <div class="col-3" style="object-fit:cover;" id="imgPro">
+                                    <div class="row" id="imgPro">
+                                        @*<div class="col-3" style="object-fit:cover;">
 
-                                            
-
-                                        </div>
+                                            <img src="~/Images/1-1_1523988105.jpg" />
+                                            <div class="_13mC4" name="btnBo" style="right: 13.8604px; top: 0px;">                                                
+                                                    X                                               
+                                            </div>
+                                        </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -66,6 +69,33 @@
         </div>
     </div>
 </section>
+<style>
+    ._13mC4 {
+        background-color: #fff;
+        border: 2px solid #ebebeb;
+        cursor: pointer;
+        padding: 0px 5px;
+        position: absolute;
+        border-radius:5px;
+    }
+    input {
+        box-shadow: none;
+    }
+
+        input[type="file" i] {
+            background-color: initial;
+            cursor: default;
+            align-items: baseline;
+            color: inherit;
+            text-overflow: ellipsis;
+            white-space: pre;
+            text-align: start !important;
+            padding: initial;
+            border: initial;
+            overflow: hidden !important;
+        }
+
+</style>
 @section Jsfooter{
     <script>
         var img = ["NULL","NULL","NULL","NULL","NULL"];
@@ -104,7 +134,11 @@
                                 processData: false,//Khong Xu Ly Du Lieu
                                 data: formdata,
                                 success: function (ImageData) {
-                                        $('#imgPro').append(`<img src="` + ImageData + `"/>`);
+                                    $('#imgPro').append(`<div class="col-3" id="` + i +`" style="object-fit:cover;">
+                                        <img src="` + ImageData + `"/>
+                                        <div class="_13mC4" name="`+i+`" style="right: 13.8604px; top: 0px;">
+                                                    X
+                                            </div></div>`);
                                         img[i] = ImageData;
                                         //location.reload();
                                         i++;
@@ -120,7 +154,13 @@
                 
             });
         });
+        $(document).on('click', '._13mC4', function () {
+            $('#' + $(this).attr("name")).remove();
+            //img[$(this).attr("name")] = "NULL";
+            //alert(img[$(this).attr("name")])
+        })
         function AddBaiDang() {
+            //alert(img[0] + "" + img[1]);
             $.ajax({              
                 url: '/Home/AddBaiDang',
                 type:'post',

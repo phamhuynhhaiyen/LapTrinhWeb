@@ -1,14 +1,171 @@
-﻿
+﻿@*@model List<WebsiteRaoVat.Models.TaiKhoan>
+@using WebsiteRaoVat.Models;*@
 @{
     ViewBag.Title = "Chat";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="py-3" style="margin-top:10%">
+<section class="py-3" style="margin-top:10%;">
     <div class="container">
-        <div class="row" style="background-color:#fff; margin:1px; padding:2rem">
-            Chat
+        <div class="row" style="background-color: #fff; margin: 1px; ">
+            <div class="col-4" style="border-right: solid 2px; border-right-color: #f5f2f6;">
+                <div class="row" style="width: 100%;padding:1.25rem">
+                    <h5 style="font-weight:700">Trò chuyện </h5>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row" style="width: 100%; padding: 1.25rem;">
+                    <h5 style="font-weight:700" id="TenUser"></h5>
+                </div>
+            </div>
+        </div>
+        <input hidden value="@ViewBag.ChatUser" id="txtChatUser" />
+        <input hidden value="@ViewBag.Ten" id="txtTenUser" />
+        <div class="row" style="background-color: #fff; margin: 1px; ">
+            <div class="col-4" style="overflow: auto; height: 500px; border-right: solid 2px; border-right-color: #f5f2f6;" id="frmTaiKhoan">
+                @*@foreach (var item in Model)
+                {
+                        <div class="row" style="width:100%;padding:0.5rem;cursor:pointer" name="chonUser" id="@item.Username">
+                            <div class="col-3">
+                                <img src="~/Images/img_avatar.png" width="50" height="50" style="border-radius:50%" />
+                            </div>
+                            <div class="col-9" style="padding:0" id="@item.TenNguoiDung">
+                                <h5 style="font-weight:500; margin-top:5px">@item.TenNguoiDung</h5>
+                            </div>
+                        </div>
+
+
+                }*@
+
+
+
+            </div>
+            <div class="col-8">
+                <div class="row" style=" border-bottom: solid 2px; border-bottom-color: #f5f2f6;">
+                    <div style="overflow: auto; height: 400px; width: 100%;padding:1rem" id="frmChat">
+
+
+
+
+                    </div>
+                </div>
+                <div class="row" style="width: 100%; padding: 1.5rem 1rem ">
+                    <div class="col-11">
+                        <input type="text" id="txtNoiDung" style="border: 3px solid #ebebeb; height: 50px; width: 100%; padding-left: 20px; padding-right: 15px;" value="" />
+
+                    </div>
+                    <div class="col-1" style="padding:0">
+                        <button class="btn" id="btnSend">
+                            <img src="~/Images/paper_plane_25px.png" height="30" width="30" />
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+@section Jsfooter{
+    <script>
 
+        var ChatUser = "";
+        $(document).ready(function () {
+            LoaddsTaiKhoan();
+            ChatUser = $('#txtChatUser').val();
+            $('#TenUser').append($('#txtTenUser').val());
+            //LoadDoanChat();
+        });
+
+        $(document).on('click', 'div[name="chonUser"]', function () {
+            //alert($(this).attr('id'));
+            ChatUser = $(this).attr('id');
+            $('#TenUser').empty();
+            $('#TenUser').append($(this).find('.col-9').attr('id'));
+            LoadDoanChat();
+        });
+        setInterval(function () {
+            LoadDoanChat();
+            LoaddsTaiKhoan();
+        }, 1000);
+        function LoaddsTaiKhoan() {
+            $.ajax({
+                type: 'get',
+                url: '/Chat/getTaiKhoan',
+                success: function (data) {
+                    $('#frmTaiKhoan').empty();
+                    $.each(data.listtaikhoan, function (k, v) {
+                        var c = `<div class="row" style="width:100%;padding:0.5rem;cursor:pointer" name="chonUser" id=`+v.Username+`>
+                            <div class="col-3">
+                                <img src="/Images/img_avatar.png" width="50" height="50" style="border-radius:50%" />
+                            </div>
+                            <div class="col-9" style="padding:0" id="`+v.TenNguoiDung+`">
+                                <h5 style="font-weight:500; margin-top:5px">`+v.TenNguoiDung+`</h5>
+                            </div>
+                        </div>`;
+                        $('#frmTaiKhoan').append(c);
+                    });
+                }
+            })
+        }
+        function LoadDoanChat() {
+            $.ajax({
+                type: 'get',
+                url: '/Chat/getCuocHoiThoai',
+                data: {
+                    username: ChatUser,
+                },
+                success: function (data) {
+                    //console.log(data.listhoithoai);
+                    $('#frmChat').empty();
+                    $.each(data.listhoithoai, function (k, v) {
+                        if (v.NguoiNhan != ChatUser) {
+                            var content = `<div class="row" style="margin-bottom:5px">
+                                <div class="col-6" style="height:auto">
+                                    <div style="border-radius: 10px; padding: 0.5rem 1rem; float: left; background-color: #f5f2f6; max-width:300px">
+                                        `+ v.NoiDung + `
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    &nbsp;
+                                </div>
+                            </div>`;
+                            $('#frmChat').append(content);
+                        }
+                        else {
+                            var content = `<div class="row" style="margin-bottom:5px">
+                                <div class="col-6">
+                                        &nbsp;
+                                </div>
+                                <div class="col-6" style="height:auto">
+                                    <div style="border-radius: 10px; padding: 0.5rem 1rem;float: right; background-color: #e7ab3c; color: #fff;max-width:300px ">
+                                        `+ v.NoiDung + `
+                                    </div>
+                                </div>
+                            </div>`;
+                            $('#frmChat').append(content);
+                        }
+                    });
+                }
+
+            })
+        }
+    
+
+
+        $('#btnSend').click(function () {
+            if ($('#txtNoiDung').val() != "") {
+                $.ajax({
+                    type: 'post',
+                    url: '/Chat/AddMessage',
+                    data: {
+                        username: ChatUser,
+                        noidung: $('#txtNoiDung').val(),
+                    }, success: function (data) {
+                        LoadDoanChat();
+                        $('#txtNoiDung').val("");
+                    }
+                })
+            }
+
+        });
+    </script>
+}

@@ -63,15 +63,13 @@
             }
         </tbody>
     </table>
-    <div class="Trang">
-        Trang: 
-        @for (int i = 1; i <= iTrang; i++)
-        {
-            <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
-        }
-    </div>
 </div>
-
+<div class="row" style="margin:1rem;">
+    @for (int i = 1; i <= iTrang; i++)
+    {
+        <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
+    }
+</div>
 <div class="modal" id="modalDuyet">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -91,10 +89,18 @@
         </div>
     </div>
 </div>
-
 <style>
     .SoTrangChua {
         display: none;
+    }
+
+    .linkTrang {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-right: 5px;
+        background-color: #fff;
+        color: black;
     }
 
     .SoTrang1 {
@@ -102,8 +108,13 @@
     }
 
     a:hover {
-        color: red;
         text-decoration: none;
+        background-color: #E7EDF6;
+    }
+
+    a:focus {
+        background-color: #4755AB;
+        color: #fff
     }
 </style>
 @section Jsfooter{

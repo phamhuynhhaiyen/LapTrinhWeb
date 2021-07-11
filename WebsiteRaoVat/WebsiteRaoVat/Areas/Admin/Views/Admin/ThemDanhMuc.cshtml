@@ -12,67 +12,19 @@
 </nav>
 <section class="py-3" style="background-color: #fff;">
     <div class="row" style=" margin:1px; padding:3rem">
-        <div class="col-5">
-            <div class="w3-content w3-display-container" style="margin-bottom:1rem">
-                <input id="txtMaBai" hidden />
-                <div class="mySlides" style="object-fit:cover" id="imgPro"></div>
-                @*@{ var i = 0;}
-        @if (Model.Hinh != null)
-        {
-            <img class="mySlides" src="@Url.Content(""+Model.Hinh)">
-
-        }
-        @if (Model.HinhAnh1 != null)
-        {
-            <img class="mySlides" src="@Url.Content(""+Model.HinhAnh1)">
-            i += 1;
-        }
-        @if (Model.HinhAnh2 != null)
-        {
-            <img class="mySlides" src="@Url.Content(""+Model.HinhAnh2)">
-            i += 1;
-        }
-        @if (Model.HinhAnh3 != null)
-        {
-            <img class="mySlides" src="@Url.Content(""+Model.HinhAnh3)">
-            i += 1;
-        }
-        @if (Model.HinhAnh4 != null)
-        {
-            <img class="mySlides" src="@Url.Content(""+Model.HinhAnh4)">
-            i += 1;
-        }
-        <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%;">
-            @for (var j = 0; j < i; j++)
-            {
-                <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(@j)"></span>
-
-            }
-            <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-            <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
-
-
-        </div>*@
-
-            </div>
-
-
-        </div>
-
-
         <div class="col-6" style="margin-left:3rem">
             <div class="row">
                 <table class="table table-borderless">
                     <tbody>
                         <tr>
                             <th scope="row" width="20%">Tên danh mục</th>
-                            <td><input type="text" id="TieuDe" required="" placeholder="Tên danh mục "></td>
+                            <td ><input type="text" style="width:300px" id="TieuDe" value="" class="form-control" placeholder="Tên danh mục "></td>
                         </tr>
                         <tr>
                             <th scope="row">Hình ảnh</th>
                             <td><input accept="image/*" onchange="" id="txtimg" name="image" type="file"></td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
                 <button class="btn btn-xs btn-success text-white" style="margin-left:10px" id="btnDuyet">Thêm mới</button>
@@ -81,6 +33,55 @@
 
 
         </div>
+        <div class="col-5">
+            <div class="w3-content w3-display-container" style="margin-bottom:1rem">
+                <input id="txtMaBai" hidden />
+                <div class="mySlides" style="object-fit:cover" id="imgPro"></div>
+                @*@{ var i = 0;}
+                @if (Model.Hinh != null)
+                {
+                    <img class="mySlides" src="@Url.Content(""+Model.Hinh)">
+
+                }
+                @if (Model.HinhAnh1 != null)
+                {
+                    <img class="mySlides" src="@Url.Content(""+Model.HinhAnh1)">
+                    i += 1;
+                }
+                @if (Model.HinhAnh2 != null)
+                {
+                    <img class="mySlides" src="@Url.Content(""+Model.HinhAnh2)">
+                    i += 1;
+                }
+                @if (Model.HinhAnh3 != null)
+                {
+                    <img class="mySlides" src="@Url.Content(""+Model.HinhAnh3)">
+                    i += 1;
+                }
+                @if (Model.HinhAnh4 != null)
+                {
+                    <img class="mySlides" src="@Url.Content(""+Model.HinhAnh4)">
+                    i += 1;
+                }
+                <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%;">
+                    @for (var j = 0; j < i; j++)
+                    {
+                        <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(@j)"></span>
+
+                    }
+                    <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+                    <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+
+
+                </div>*@
+
+            </div>
+
+
+        </div>
+
+
+
 
     </div>
 
@@ -196,9 +197,14 @@
 
         $('#btnDuyet').on('click', function () {
             trangthai = 0;
-            $('#btnMess').empty();
-            $('#btnMess').append('<p>Bạn chắc chắn thêm mới danh mục?</p>');
-            $('#modalDuyet').show();
+            if ($("#TieuDe").val() != "") {
+                $('#btnMess').empty();
+                $('#btnMess').append('<p>Bạn chắc chắn thêm mới danh mục?</p>');
+                $('#modalDuyet').show();
+            } else {
+                alert("Vui lòng nhập tiêu đề danh mục");
+            }
+            
 
         });
 
@@ -206,13 +212,13 @@
             $('#modalDuyet').hide();
 
         }
-        $('#btnTuchoi').on('click', function () {
-            trangthai = 1;
-            $('#btnMess').empty();
-            $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
-            $('#modalDuyet').show();
+        //$('#btnTuchoi').on('click', function () {
+        //    trangthai = 1;
+        //    $('#btnMess').empty();
+        //    $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
+        //    $('#modalDuyet').show();
 
-        });
+        //});
         $('#btnDongY').click(function () {
             //alert(ma);
             $.ajax({
@@ -230,47 +236,7 @@
                 }
 
             });
+            
         });
     </script>
 }
-@*@using (Html.BeginForm("ThemDanhMuc", "Admin", FormMethod.Post, new { @enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div style="color:blue" class="form-horizontal">
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            <div style="padding:10px" class="row">
-                <div style="margin-left:15px" class="col">
-                    @Html.LabelFor(model => model.TenDanhMuc, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div style="margin-right:420px " class="col-md-6">
-                    @Html.EditorFor(model => model.TenDanhMuc, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.TenDanhMuc, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div style="padding:10px" class="row">
-                <div style="margin-left:35px" class="col">
-                    @Html.LabelFor(model => model.Hinh, htmlAttributes: new { @class = "control-label col-md-2" })
-                </div>
-                <div style="margin-right:420px " class="col-md-6">
-                    <input name="Hinh" type="file" />
-                    <span style="color:red">@ViewBag.upload</span>
-
-                </div>
-            </div>
-
-
-
-            <div class="form-group">
-                <div style="padding:45px" class="col-md-offset-2 col-md-10">
-                    <button style="background-color:blue; text-align:center; margin-left:100px;" class="btn btn-default">Thêm</button>
-                </div>
-            </div>
-            </div>
-
-            }
-            <style>
-            </style>*@

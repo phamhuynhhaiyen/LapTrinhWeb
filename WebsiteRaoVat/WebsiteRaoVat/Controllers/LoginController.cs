@@ -24,37 +24,43 @@ namespace WebsiteRaoVat.Controllers
         {
             return PartialView();
         }
-        [HttpPost]
+        //[HttpPost]
         // đăng nhập thường
-        public ActionResult login(TaiKhoan tk)
-        {
+        //public ActionResult login(TaiKhoan tk)
+        //{
 
-            var a = GetMD5(tk.Password).ToString();
+        //    var a = GetMD5(tk.Password).ToString();
 
-            var tv = (from c in db.TaiKhoans where c.Username == tk.Username && c.Password == tk.Password select c).FirstOrDefault();
-            if (tv != null)
-            {
-                Session["TaiKhoan"] = tv;
-                return RedirectToAction("Index", "Home");
-            }
-            return View();
+        //    var tv = (from c in db.TaiKhoans where c.Username == tk.Username && c.Password == tk.Password select c).FirstOrDefault();
+        //    if (tv != null)
+        //    {
+        //        Session["TaiKhoan"] = tv;
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    return View();
             
-        }
+        //}
         public JsonResult KTDangNhap(string username, string password)
         {
             try
             {
-                var taikhoan = (from t in db.TaiKhoans where t.Username == username && t.Password == password select t).FirstOrDefault();
+                var a = GetMD5(password).ToString();
+                var taikhoan = (from t in db.TaiKhoans where t.Username == username && t.Password == a select t).FirstOrDefault();
                 int thanhcong = 1;
+                int quyen = 0;
                 if(taikhoan != null)
                 {
+                    if(taikhoan.Quyen == 1)
+                    {
+                        quyen = 1;
+                    }
                     Session["TaiKhoan"] = taikhoan;
                 }
                 else
                 {
                     thanhcong = 0;
                 }
-                return Json(new { code = 200, thanhcong = thanhcong}, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 200, thanhcong = thanhcong, quyen = quyen}, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -244,16 +250,37 @@ namespace WebsiteRaoVat.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult thu()
+        public ActionResult Register()
         {
-            var user = db.TaiKhoans;
-            return View(user);
+            return PartialView();
         }
-
-        // đăng ký
-        public ActionResult CreateAcc()
+        public JsonResult DangKyTK(string username, string password, string hoten, string sdt)
         {
-            return View();
+            try
+            {
+                var taikhoan = (from t in db.TaiKhoans where t.Username == username select t).Count();
+                int thanhcong = 1;
+                if(taikhoan > 0)
+                {
+                    thanhcong = 0;
+                }
+                else
+                {
+                    TaiKhoan tk = new TaiKhoan();
+                    tk.Username = username;
+                    tk.Password = GetMD5(password);
+                    tk.TenNguoiDung = hoten;
+                    tk.SDT = sdt;
+                    tk.NgayThamGia = DateTime.Now;
+                    db.TaiKhoans.Add(tk);
+                    db.SaveChanges();
+                }
+                return Json(new { code = 200 , thanhcong = thanhcong}, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 

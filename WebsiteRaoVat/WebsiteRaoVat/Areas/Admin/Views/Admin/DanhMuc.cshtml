@@ -6,8 +6,7 @@
     Layout = "~/Areas/Admin/Views/Admin/layoutAdmin.cshtml";
 
 }
-
-@{ 
+@{
     int iDem = 0;
     int iSLDanhMucTrenTrang = 5;
     int iTrang = 1;
@@ -19,7 +18,7 @@
     </ol>
 </nav>
 
-<div class="row" style="margin:1rem; background-color:#fff">
+<div class="row" style="margin:1rem; background-color:#fff; padding:0rem 1rem">
     <table class="table">
         <thead>
             <tr>
@@ -32,7 +31,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                if(iDem % iSLDanhMucTrenTrang == 0 && iDem != 0)
+                if (iDem % iSLDanhMucTrenTrang == 0 && iDem != 0)
                 {
                     iTrang++;
                 }
@@ -48,13 +47,13 @@
             }
         </tbody>
     </table>
-    <div class="Trang">
-        Trang: 
-        @for(int i =1; i<=iTrang; i++)
-        {
-            <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
-        }
-    </div>
+    
+</div>
+<div class="row" style="margin:1rem;">
+    @for (int i = 1; i <= iTrang; i++)
+    {
+        <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
+    }
 </div>
 <div class="modal" id="modalThongBao">
     <div class="modal-dialog" role="document">
@@ -76,22 +75,34 @@
     </div>
 </div>
 <style>
-    .SoTrangChua{
+    .SoTrangChua {
         display: none;
     }
-    .SoTrang1{
+    .linkTrang {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-right: 5px;
+        background-color: #fff;
+        color:black;
+    }
+    .SoTrang1 {
         display: table-row;
     }
+
     a:hover {
-        color: red;
+        
         text-decoration: none;
+        background-color: #E7EDF6;
     }
-    
+    a:focus {
+        background-color: #4755AB;
+        color:#fff
+    }
 </style>
 @section Jsfooter{
     <script>
         var trangthai = 2;
-        var ma;
 
 
         function modalClose() {
@@ -102,7 +113,6 @@
             $('#btnMess').empty();
             $('#btnMess').append('<p>Bạn chắc chắn xóa danh mục?</p>');
             $('#modalThongBao').show();
-            trangthai = 1;
             ma = $(this).closest('tr').attr('id');
         });
         $('#btnDongYXoa').click(function () {
@@ -110,7 +120,6 @@
                 type: 'post',
                 url: '/Admin/Admin/XoaDanhMucSanPham',
                 data: {
-
                     madanhmuc: ma,
                 },
                 success: function (data) {
@@ -128,68 +137,4 @@
         });
     </script>
 }
-@*<div class="grid-product">
 
-        @webGrid.GetHtml(
-            tableStyle: "tablesp",
-            headerStyle: "gridhead",
-            footerStyle: "gridfooter",
-            rowStyle: "gridrow",
-            alternatingRowStyle: "gridaltrow",
-            columns: webGrid.Columns(
-                webGrid.Column("MaDanhMuc", "Mã danh mục", style: "id1"),
-                webGrid.Column("TenDanhMuc", "Tên danh mục", style: "id"),
-                webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
-
-                webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaDanhMuc", new { id = c.MaDanhMuc })),
-                webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaDanhMuc", new { id = c.MaDanhMuc }))
-               ))
-    </div>*@
-
-@*<style>
-
-
-        .tablesp {
-            width: 1100px;
-            color: blue;
-            border: 1px solid #ed71a3;
-            display: table;
-            margin-left: 50px;
-            margin-bottom: 20px;
-            background-color: #fff;
-        }
-
-        .gridhead {
-            background-color: blue;
-
-            height: 50px;
-        }
-
-            .gridhead > th > a {
-                color: white;
-                 text-align:center;
-                display: table-cell;
-            }
-
-        .gridaltrow {
-            border: solid;
-            height: 150px
-        }
-
-        .gridrow {
-            border: solid;
-            height: 150px
-        }
-
-        .id {
-            display: table-cell;
-
-        }
-        .id1 {
-            display: table-cell;
-
-
-        }
-
-
-    </style>*@

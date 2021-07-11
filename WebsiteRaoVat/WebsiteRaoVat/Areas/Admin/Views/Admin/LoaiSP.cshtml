@@ -46,13 +46,12 @@
             }
         </tbody>
     </table>
-    <div class="Trang">
-        Trang: 
-        @for (int i = 1; i <= iTrang; i++)
-        {
-            <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
-        }
-    </div>
+</div>
+<div class="row" style="margin:1rem;">
+    @for (int i = 1; i <= iTrang; i++)
+    {
+        <a class="linkTrang" data-sotrang="@Url.Content("SoTrang" + i)" href="#">@i</a>
+    }
 </div>
 <div class="modal" id="modalDuyet">
     <div class="modal-dialog" role="document">
@@ -73,10 +72,18 @@
         </div>
     </div>
 </div>
-
 <style>
     .SoTrangChua {
         display: none;
+    }
+
+    .linkTrang {
+        padding: 0.5rem 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-right: 5px;
+        background-color: #fff;
+        color: black;
     }
 
     .SoTrang1 {
@@ -84,11 +91,15 @@
     }
 
     a:hover {
-        color: red;
         text-decoration: none;
+        background-color: #E7EDF6;
+    }
+
+    a:focus {
+        background-color: #4755AB;
+        color: #fff
     }
 </style>
-
 @section Jsfooter{
     <script>
         var trangthai = 2;
@@ -136,66 +147,3 @@
         });
     </script>
 }
-
-@*<div class="grid-product">
-
-        @webGrid.GetHtml(
-            tableStyle: "tablesp",
-            headerStyle: "gridhead",
-            footerStyle: "gỉdfooter",
-            rowStyle: "gridrow",
-            alternatingRowStyle: "gridaltrow",
-            columns: webGrid.Columns(
-                webGrid.Column("MaLoaiSP", "Mã loại sản phẩm", style: "id1"),
-                webGrid.Column("TenLoaiSP", "Tên loại sản phẩm", style: "id"),
-
-                webGrid.Column("Hinh", "Hình ảnh", format: c => @Html.Raw("<img  width=\"200\" height=\"200\"  src=\"" + c.Hinh + "\" >")),
-
-                webGrid.Column(format: c => @Html.ActionLink("Sửa", "SuaLoaiSP", new { id = c.MaLoaiSP})),
-                webGrid.Column(format: c => @Html.ActionLink("Xóa", "XoaLoaiSP", new { id = c.MaLoaiSP }))
-               ))
-    </div>
-
-    <style>
-
-
-        .tablesp {
-            width: 1100px;
-            color: blue;
-            border: 1px solid #ed71a3;
-            display: table;
-              margin-left:50px;
-            margin-bottom:20px;
-
-        }
-
-        .gridhead {
-            background-color: blue;
-            height: 50px;
-        }
-
-            .gridhead > th > a {
-                color: white;
-                text-align: center;
-                display: table-cell;
-            }
-
-        .gridaltrow {
-            border: solid;
-            height: 150px
-        }
-
-        .gridrow {
-            border: solid;
-            height: 150px
-        }
-
-        .id {
-            display: table-cell;
-        }
-
-        .id1 {
-            display: table-cell;
-        }
-    </style>*@
-

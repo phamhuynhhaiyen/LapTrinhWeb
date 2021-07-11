@@ -130,12 +130,12 @@ namespace WebsiteRaoVat.Controllers
                               select new {
                                   MaBaiDang = baidang.MaBaiDang,
                                   TieuDe = baidang.TieuDe,
-                                  Gia = baidang.Gia,
+                                  Gia = baidang.Gia.GetValueOrDefault(0).ToString("N0"),
                                   HinhAnh = baidang.HinhAnh,
                                   TrangThai = baidang.TrangThai,
                                   NgayHetHan = gop?.NgayHetHan ?? null
                               }).ToList();
-                Console.WriteLine(lstGop);
+                //Console.WriteLine(lstGop);
                 return Json(new { code = 200, lstBaiDang = lstGop }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -143,15 +143,23 @@ namespace WebsiteRaoVat.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        //Để tạm thời để thiết kế layout
-        public JsonResult getDanhSachSP(int trang)
+
+        public JsonResult getDanhSachSP()
         {
             try
             {
-                var lstbaidang = (from b in db.BaiDangs where b.TrangThai == 0 orderby b.NgayDang descending select new { MaBaiDang = b.MaBaiDang, TieuDe = b.TieuDe, Gia = b.Gia, HinhAnh = b.HinhAnh, NgayDang = b.NgayDang }).ToList();
-                var trangSP = lstbaidang.Count() % 6 == 0 ? lstbaidang.Count() / 6 : lstbaidang.Count() / 6 + 1;
-                var kqpt = lstbaidang.Skip((trang - 1) * 6).Take(6).ToList();
-                return Json(new { code = 200, trangSP = trangSP, lstBaiDang = kqpt }, JsonRequestBehavior.AllowGet);
+                var lstbaidang = (from b in db.BaiDangs.Where(x => x.TrangThai == 0).OrderBy(x => x.NgayDang).ToList()
+                                  select new
+                                  {
+                                      MaBaiDang = b.MaBaiDang,
+                                      TieuDe = b.TieuDe,
+                                      Gia = b.Gia.GetValueOrDefault(0).ToString("N0"),
+                                      HinhAnh = b.HinhAnh,
+                                      NgayDang = b.NgayDang.ToString()
+                                  }).ToList();
+                //Lấy tin ưu tiên
+
+                return Json(new { code = 200, lstBaiDang = lstbaidang }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -174,8 +182,52 @@ namespace WebsiteRaoVat.Controllers
         }
         public ActionResult BaiDang(int id)
         {
-            BaiDang baidang = db.BaiDangs.Where(x => x.MaBaiDang == id).FirstOrDefault();
+            TaiKhoan tk = (TaiKhoan)Session["TaiKhoan"];
+            BaiDang baidang = db.BaiDangs.Where(x => x.MaBaiDang == id).FirstOrDefault();       
+            if(tk != null)
+            {
+                ViewBag.Session = tk.Username;
+            }
             return View(baidang);
+        }
+        public JsonResult getTinLienQuan(int madanhmuc, int mabaidang)
+        {
+            try
+            {
+                List<BaiDang> lst = (from b in db.BaiDangs
+                              where b.LoaiSanPham.MaDanhMuc == madanhmuc
+                              select b).ToList();
+                List<BaiDang> baidang = (from b in db.BaiDangs
+                                        where b.MaBaiDang == mabaidang
+                                        select b).ToList();
+                List<BaiDang> lsttin = (lst.Except(baidang)).ToList();
+                List<BaiDang> listBaiBang = new List<BaiDang>();
+                if(lsttin.Count > 6)
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        listBaiBang.Add(lsttin[i]);
+                    }
+                }
+                else
+                {
+                    listBaiBang = lsttin;
+                }
+                var tin = (from b in listBaiBang
+                           select new
+                           {
+                               MaBaiDang = b.MaBaiDang,
+                               TieuDe = b.TieuDe,
+                               Gia = b.Gia.GetValueOrDefault(0).ToString("N0"),
+                               HinhAnh = b.HinhAnh,
+                               NgayDang = b.NgayDang.ToString()
+                           }).ToList();
+                return Json(new { code = 200, listTin = tin }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public static string serectkey;

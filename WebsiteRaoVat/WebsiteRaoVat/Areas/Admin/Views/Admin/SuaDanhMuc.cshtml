@@ -15,26 +15,17 @@
 <section class="py-3" style="background-color: #fff;">
     <div class="row" style=" margin:1px; padding:3rem">
         <div class="col-5">
-            <div class="w3-content w3-display-container" id="@Model.MaDanhMuc" style="margin-bottom:1rem">
-                <input id="txtMaBai" value="@Model.MaDanhMuc" hidden />
-                @{ var i = 0;}
-                @if (Model.Hinh != null)
+            <input id="txtMaBai" value="@Model.MaDanhMuc" hidden />
+            <input hidden id="txtHinh" value="@Model.Hinh" />
+            <div class="w3-content w3-display-container" id="imgPro" style="margin-bottom:1rem">
+
+                @if (Model.Hinh != null || Model.Hinh != "")
                 {
-                    <img class="mySlides" id="imgPro" src="@Url.Content(""+Model.Hinh)">
-                    
+                    <img class="mySlides"  src="@Url.Content(""+Model.Hinh)">
+
                 }
-                
-                <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%;">
-                    @for (var j = 0; j < i; j++)
-                    {
-                        <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(@j)"></span>
-
-                    }
-                    <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-                    <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
 
 
-                </div>
 
             </div>
 
@@ -57,7 +48,7 @@
                                 <input accept="image/*" onchange="" id="txtimg" name="image" type="file">
                             </td>
                         </tr>
-                        
+
                     </tbody>
                 </table>
                 <button class="btn btn-xs btn-success text-white" style="margin-left:10px" id="btnDuyet">Sửa</button>
@@ -149,8 +140,7 @@
 </script>
 @section Jsfooter{
     <script>
-        var img = "";
-        var trangthai = 2;
+        var img = "" + $('#txtHinh').val();
         var ma = $("#txtMaBai").val();
         $(document).ready(function () {
             $('#txtimg').change(function () {
@@ -167,8 +157,9 @@
                             processData: false,//Khong Xu Ly Du Lieu
                             data: formdata,
                             success: function (ImageData) {
-                                $('#imgPro').append(`<img src="` + ImageData + `"/>`);
-                                img += ImageData;
+                                $('#imgPro').empty();
+                                $('#imgPro').append(`<img class="mySlides" src="` + ImageData + `"/>`);
+                                img = ImageData;
                                 //location.reload();
                             }
                         });
@@ -180,7 +171,6 @@
         });
 
         $('#btnDuyet').on('click', function () {
-            trangthai = 0;
             $('#btnMess').empty();
             $('#btnMess').append('<p>Bạn chắc chắn sửa danh mục</p>');
             $('#modalDuyet').show();
@@ -191,13 +181,13 @@
             $('#modalDuyet').hide();
 
         }
-        $('#btnTuchoi').on('click', function () {
-            trangthai = 1;
-            $('#btnMess').empty();
-            $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
-            $('#modalDuyet').show();
+        //$('#btnTuchoi').on('click', function () {
+        //    trangthai = 1;
+        //    $('#btnMess').empty();
+        //    $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
+        //    $('#modalDuyet').show();
 
-        });
+        //});
         $('#btnDongY').click(function () {
             $.ajax({
                 type: 'post',
@@ -216,54 +206,8 @@
 
             });
         });
-        
-        
+
+
     </script>
 }
-
-@*@using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div style="color:blue" class="form-horizontal">
-            <hr />
-            <h4 style="text-align:center">Sửa thông tin danh mục</h4>
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            @Html.HiddenFor(model => model.MaDanhMuc)
-
-
-            <div class="row">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.TenDanhMuc, htmlAttributes: new { @class = "control-label col-md-10" })
-                </div>
-                <div  class="col-md-3">
-                    @Html.EditorFor(model => model.TenDanhMuc, new { htmlAttributes = new { @class = "form-control" } })
-
-                </div>
-            </div>
-
-
-
-            <div class="row" style="padding-top:10px">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.Hinh, htmlAttributes: new { @class = "control-label col-md-12" })
-                </div>
-                <div class="col-md-4">
-                    <input name="Hinh" type="file" />
-                    <span style="color:red">@ViewBag.upload</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Tạo mới" class="btn btn-success" />
-                </div>
-            </div>
-        </div>
-            }
-    <style>
-
-    </style>*@
 

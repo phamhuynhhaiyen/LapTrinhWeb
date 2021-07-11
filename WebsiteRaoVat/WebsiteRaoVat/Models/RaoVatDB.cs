@@ -13,7 +13,9 @@ namespace WebsiteRaoVat.Models
         }
 
         public virtual DbSet<BaiDang> BaiDangs { get; set; }
+        public virtual DbSet<CuoiHoiThoai> CuoiHoiThoais { get; set; }
         public virtual DbSet<DanhMuc> DanhMucs { get; set; }
+        public virtual DbSet<DSYeuThich> DSYeuThiches { get; set; }
         public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; }
         public virtual DbSet<QuangCao> QuangCaos { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
@@ -45,6 +47,14 @@ namespace WebsiteRaoVat.Models
                 .Property(e => e.HinhAnh4)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<CuoiHoiThoai>()
+                .Property(e => e.NguoiGui)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<CuoiHoiThoai>()
+                .Property(e => e.NguoiNhan)
+                .IsUnicode(false);
+
             modelBuilder.Entity<DanhMuc>()
                 .Property(e => e.Hinh)
                 .IsUnicode(false);
@@ -53,6 +63,10 @@ namespace WebsiteRaoVat.Models
                 .HasMany(e => e.LoaiSanPhams)
                 .WithOptional(e => e.DanhMuc)
                 .WillCascadeOnDelete();
+
+            modelBuilder.Entity<DSYeuThich>()
+                .Property(e => e.Username)
+                .IsUnicode(false);
 
             modelBuilder.Entity<LoaiSanPham>()
                 .Property(e => e.Hinh)

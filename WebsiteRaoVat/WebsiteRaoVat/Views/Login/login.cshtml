@@ -18,7 +18,7 @@
                     </div>
                     <div class="group-input">
                         <label for="pass">Mật khẩu</label>
-                        <input type="text" required="" id="pass">
+                        <input type="password" required="" id="pass">
                     </div>
                     <div class="group-input gi-check">
                         <div class="gi-more">
@@ -30,16 +30,19 @@
                             <a href="#" class="forget-pass">Forget your Password</a>
                         </div>
                     </div>
-                    <button id="btnSubmit" class="site-btn login-btn">Sign In</button>
-                    <div class="group-input" style="margin-top:10px">
-                        <button class="social-btn" style="width:200px"><img src="~/Images/facebook_f_20px.png" />&ensp;facebook</button>
-                        <button class="social-btn" style="width:200px; float:right">
-                            <img src="~/Images/google_20px.png" />&ensp;google
-                        </button>
+                    <div class="group-input gi-check" id="ThongBao">
+
                     </div>
+                        <button id="btnSubmit" class="site-btn login-btn">Sign In</button>
+                        <div class="group-input" style="margin-top:10px">
+                            <button class="social-btn" style="width:200px"><img src="~/Images/facebook_f_20px.png" />&ensp;facebook</button>
+                            <button class="social-btn" style="width:200px; float:right">
+                                <img src="~/Images/google_20px.png" />&ensp;google
+                            </button>
+                        </div>
                 </form>
                 <div class="switch-login">
-                    <a href="#" class="or-login">Or Create An Account</a>
+                    <a id="frmDangKy" style="cursor:pointer" class="or-login">Or Create An Account</a>
                 </div>
             </div>
         </div>
@@ -48,6 +51,10 @@
 
 
     <script>
+        $('#frmDangKy').click(function () {
+            $('#popup_register').show();
+            $("#popup_login").hide();
+        });
         $("#btnSubmit").click(function () {
             DangNhap();           
         });
@@ -64,8 +71,17 @@
                         if (data.code == 200) {
                             if (data.thanhcong == 1) {
                                 alert("Đăng nhập thành công");
-                                location.reload();
+                                if (data.quyen == 1) {
+                                    window.location = "/Admin/Admin";
+                                }
+                                else {
+                                    location.reload();
+                                }
+                                
                                 //window.location = "/Home/Index";
+                            } else {
+                                $('#ThongBao').empty();
+                                $('#ThongBao').append('<p style="color:red">Tên đăng nhập hoặc tài khoản không chính xác</p>')
                             }
                             
                         }

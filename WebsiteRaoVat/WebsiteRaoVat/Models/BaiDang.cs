@@ -34,6 +34,7 @@ namespace WebsiteRaoVat.Models
         public string MoTa { get; set; }
 
         [Column(TypeName = "text")]
+        [Required]
         public string HinhAnh { get; set; }
 
         public int? TrangThai { get; set; }
@@ -51,6 +52,8 @@ namespace WebsiteRaoVat.Models
 
         [Column(TypeName = "text")]
         public string HinhAnh4 { get; set; }
+
+        public int? Cout { get; set; }
 
         public virtual LoaiSanPham LoaiSanPham { get; set; }
 

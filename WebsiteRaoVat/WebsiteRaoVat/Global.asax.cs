@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +18,7 @@ namespace WebsiteRaoVat
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //SqlDependency.Start(ConfigurationManager.ConnectionStrings["RaoVatDB"].ConnectionString);
             Application["Soluongtruycap"] = 0;
         }
         protected void Session_Start()
@@ -24,6 +27,10 @@ namespace WebsiteRaoVat
             Application["Soluongtruycap"] = (int)Application["Soluongtruycap"] + 1;
             Application.UnLock();
 
+        }
+        protected void Application_End()
+        {
+            //SqlDependency.Stop(ConfigurationManager.ConnectionStrings["RaoVatDB"].ConnectionString);
         }
     }
 }

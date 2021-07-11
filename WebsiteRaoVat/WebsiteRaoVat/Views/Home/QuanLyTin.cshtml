@@ -143,7 +143,7 @@
             </div>
             <div class="col-6" style="padding:0.5rem;">
                 <h4 style="margin-bottom:5px">`+ v.TieuDe + `</h4>
-                <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>`
+                <h4 style="color:red; font-weight:700">`+ v.Gia + `đ</h4>`
                     if (v.NgayHetHan == null) {
                         content += `<button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="` + v.MaBaiDang + `">Quảng cáo</button>`;
                         content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
@@ -182,7 +182,7 @@
             </div>
             <div class="col-6" style="padding:0.5rem;">
                 <h4 styssle="margin-bottom:5px">`+ v.TieuDe + `</h4>
-                <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>`;
+                <h4 style="color:red; font-weight:700">`+ v.Gia + `đ</h4>`;
                     if (v.TrangThai == 0) {
                         if (v.NgayHetHan == null) {
                             content += `<button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="` + v.MaBaiDang + `">Quảng cáo</button>`;
@@ -190,7 +190,8 @@
                         }
                         else {
                             content += `<button style="bottom:0px;" class="btn btn-info">Đang quảng cáo</button>`;
-                            content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
+                            content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>
+                                        `;
                         }
                     }
                     if (v.TrangThai == 1) {

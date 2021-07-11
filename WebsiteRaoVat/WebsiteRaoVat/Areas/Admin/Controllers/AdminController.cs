@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebsiteRaoVat.Models;
-using PagedList;
 
 namespace WebsiteRaoVat.Areas.Admin.Controllers
 {
@@ -98,7 +97,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
 
         }
 
-        [ValidateInput(false)]
+
         [HttpPost]
         public JsonResult AddDanhMuc(string TieuDe, string Hinh)
         {
@@ -119,7 +118,6 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
         [ValidateInput(false)]
         [HttpGet]
         public ActionResult SuaDanhMuc(int? id)
@@ -141,22 +139,22 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
 
             return View(dm);
         }
-
         [HttpPost]
-        public JsonResult SuaDM(int madanhmuc, string Ten, string Hinh )
+        public JsonResult SuaDM(int madanhmuc, string Ten, string Hinh)
         {
-            
+
             try
             {
                 var danhmuc = (from c in db.DanhMucs where c.MaDanhMuc == madanhmuc select c).FirstOrDefault();
 
                 danhmuc.TenDanhMuc = Ten;
-                if (Hinh != "NULL")
-                {
-                    danhmuc.Hinh = Hinh;
-                }
-                db.DanhMucs.Add(danhmuc);
-                db.Entry(danhmuc).State = System.Data.Entity.EntityState.Modified;
+                //if (Hinh != "NULL")
+                //{
+                //    danhmuc.Hinh = Hinh;
+                //}
+                danhmuc.Hinh = Hinh;
+                //db.DanhMucs.Add(danhmuc);
+                //db.Entry(danhmuc).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
@@ -165,35 +163,8 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        //public ActionResult SuaDanhMuc(DanhMuc dm)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(dm).State = System.Data.Entity.EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("DanhMuc");
-        //    }
-        //    return View(dm);
-        //}
-
-
-        [HttpGet]
-        public ActionResult XoaDanhMuc(int madanhmuc)
-        {
-            
-            ViewBag.tongbaiviet = sobaiviet();
-            ViewBag.tongsl = Songuoithamgia();
-            DanhMuc dm = db.DanhMucs.SingleOrDefault(c => c.MaDanhMuc == madanhmuc);
-            if (dm == null)
-            {
-                return HttpNotFound();
-            }
-            
-
-            return View(dm);
-        }
         
+      
         [HttpPost]
         public JsonResult XoaDanhMucSanPham(int madanhmuc)
         {
@@ -202,7 +173,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 var dm = (from c in db.DanhMucs where c.MaDanhMuc == madanhmuc select c).FirstOrDefault();
                 db.DanhMucs.Remove(dm);
                 db.SaveChanges();
-                
+
                 return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -210,27 +181,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
-        //public ActionResult XoaDanhMuc(int id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
-
-
-        //    }
-        //    DanhMuc dm = db.DanhMucs.SingleOrDefault(c => c.MaDanhMuc == id);
-        //    if (dm == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    db.DanhMucs.Remove(dm);
-        //    db.SaveChanges();
-        //    return RedirectToAction("DanhMuc");
-
-        //}
-
-
+        
 
         public ActionResult LoaiSP()
         {
@@ -250,8 +201,6 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
 
         }
 
-        [ValidateInput(false)]
-        [HttpPost]
         public JsonResult AddLoaiSP(int MaDanhMuc, string TieuDe, string Hinh)
         {
             try
@@ -259,7 +208,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 LoaiSanPham loaiSanPham = new LoaiSanPham();
                 loaiSanPham.TenLoaiSP = TieuDe;
                 loaiSanPham.MaDanhMuc = MaDanhMuc;
-               
+
                 if (Hinh != "NULL")
                 {
                     loaiSanPham.Hinh = Hinh;
@@ -273,7 +222,6 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
         [ValidateInput(false)]
         [HttpGet]
         public ActionResult SuaLoaiSP(int? id)
@@ -281,7 +229,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
-            
+            ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc");
             if (id == null)
             {
                 Response.StatusCode = 404;
@@ -305,12 +253,12 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 var loaiSanPham = (from c in db.LoaiSanPhams where c.MaLoaiSP == maloai select c).FirstOrDefault();
                 loaiSanPham.MaDanhMuc = MaDanhMuc;
                 loaiSanPham.TenLoaiSP = Ten;
-                if(Hinh != null)
-                {
+                //if (Hinh != null)
+                //{
                     loaiSanPham.Hinh = Hinh;
-                }
-                db.LoaiSanPhams.Add(loaiSanPham);
-                db.Entry(loaiSanPham).State = System.Data.Entity.EntityState.Modified;
+                //}
+                //db.LoaiSanPhams.Add(loaiSanPham);
+                //db.Entry(loaiSanPham).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
@@ -319,31 +267,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
-        [HttpGet]
-        public ActionResult XoaLoaiSP(int? id)
-        {
-            ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
-            ViewBag.tongbaiviet = sobaiviet();
-            ViewBag.tongsl = Songuoithamgia();
-            ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc");
 
-            if (id == null)
-            {
-                Response.StatusCode = 404;
-                return View();
-            }
-            LoaiSanPham loaiSP = db.LoaiSanPhams.SingleOrDefault(c => c.MaLoaiSP == id);
-            if (loaiSP == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc", loaiSP.MaDanhMuc);
-
-            return View(loaiSP);
-        }
-        [ValidateInput(false)]
-        [HttpPost]
         public JsonResult DeleteLoaiSP(int maloaiSP)
         {
             try
@@ -358,7 +282,26 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult XoaLoaiSP(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+
+            }
+            LoaiSanPham loaiSP = db.LoaiSanPhams.SingleOrDefault(c => c.MaLoaiSP == id);
+            if (loaiSP == null)
+            {
+                return HttpNotFound();
+            }
+            db.LoaiSanPhams.Remove(loaiSP);
+            db.SaveChanges();
+            return RedirectToAction("LoaiSP");
+
+        }
         public ActionResult DSBaiViet()
         {
             //ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
@@ -592,7 +535,6 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
      
             return Thang12;
         }
-
         
     }
 }

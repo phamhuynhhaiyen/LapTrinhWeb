@@ -19,43 +19,7 @@
             <div class="w3-content w3-display-container" style="margin-bottom:1rem">
                 <input id="txtMaBai" hidden />
                 <div class="mySlides" style="object-fit:cover" id="imgPro"></div>
-                @*@{ var i = 0;}
-                    @if (Model.Hinh != null)
-                    {
-                        <img class="mySlides" src="@Url.Content(""+Model.Hinh)">
 
-                    }
-                    @if (Model.HinhAnh1 != null)
-                    {
-                        <img class="mySlides" src="@Url.Content(""+Model.HinhAnh1)">
-                        i += 1;
-                    }
-                    @if (Model.HinhAnh2 != null)
-                    {
-                        <img class="mySlides" src="@Url.Content(""+Model.HinhAnh2)">
-                        i += 1;
-                    }
-                    @if (Model.HinhAnh3 != null)
-                    {
-                        <img class="mySlides" src="@Url.Content(""+Model.HinhAnh3)">
-                        i += 1;
-                    }
-                    @if (Model.HinhAnh4 != null)
-                    {
-                        <img class="mySlides" src="@Url.Content(""+Model.HinhAnh4)">
-                        i += 1;
-                    }
-                    <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%;">
-                        @for (var j = 0; j < i; j++)
-                        {
-                            <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(@j)"></span>
-
-                        }
-                        <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
-                        <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
-
-
-                    </div>*@
 
             </div>
 
@@ -69,11 +33,11 @@
                     <tbody>
                         <tr>
                             <th scope="row" width="20%">Loại sản phẩm</th>
-                            <td><input type="text" id="TieuDe"class="form-control" required="" placeholder="Loại sản phẩm "></td>
+                            <td><input type="text" id="TieuDe" class="form-control" value="" placeholder="Loại sản phẩm "></td>
                         </tr>
                         <tr>
                             <th scope="row" width="20%">Danh mục</th>
-                            <td>@Html.DropDownList("MaDanhMuc", null, new { @class="form-control",@id = "MaDanhMuc" })</td>
+                            <td>@Html.DropDownList("MaDanhMuc", null, new { @class = "form-control", @id = "MaDanhMuc",@style="background-image: none" })</td>
                         </tr>
                         <tr>
                             <th scope="row">Hình ảnh</th>
@@ -202,24 +166,30 @@
         });
 
         $('#btnDuyet').on('click', function () {
-            trangthai = 0;
-            $('#btnMess').empty();
-            $('#btnMess').append('<p>Bạn chắc chắn thêm mới loại sản phẩm?</p>');
-            $('#modalDuyet').show();
-
+            if ($("#TieuDe").val() != "") {
+                $('#btnMess').empty();
+                $('#btnMess').append('<p>Bạn chắc chắn thêm mới loại sản phẩm?</p>');
+                $('#modalDuyet').show();
+            } else {
+                alert("Vui lòng nhập tiêu đề loại sản phẩm");
+            }
         });
 
         function modalClose() {
             $('#modalDuyet').hide();
 
         }
-        $('#btnTuchoi').on('click', function () {
-            trangthai = 1;
-            $('#btnMess').empty();
-            $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
-            $('#modalDuyet').show();
+        //$('#btnTuchoi').on('click', function () {
+        //    
+        //        $('#btnMess').empty();
+        //        $('#btnMess').append('<p>Bạn chắc chắn từ chối bài viết</p>');
+        //        $('#modalDuyet').show();
+        //    } else {
+        //        alert("Vui lòng nhập tiêu đề loại sản phẩm");
+        //    }
+            
 
-        });
+        //});
         $('#btnDongY').click(function () {
             //alert(ma);
             $.ajax({

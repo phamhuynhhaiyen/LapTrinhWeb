@@ -1,10 +1,32 @@
-﻿
+﻿@using WebsiteRaoVat.Models
+
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btndanhmuc").change(function () {
+                window.location = "/TinDang/DSTinDang/" + $(this).val();
+            });
+        });
+ 
+    </script>
+
 <div class="container">
     <div class="inner-header">
         <div class="row">
             <div class="col-lg-7 col-md-7">
                 <div class="advanced-search">
-                    <button type="button" class="category-btn">All Categories</button>
+                    <select id="btndanhmuc"  class="category-btn">
+                        DANH MỤC
+
+                        <option class="category-btn">DANH MỤC</option>
+                        @foreach (var item in new RaoVatDB().DanhMucs)
+                        {
+                            <option value="@item.MaDanhMuc"  id="@item.MaDanhMuc"> @item.TenDanhMuc</option>
+                        }
+
+
+                    </select>
                     <div class="input-group">
                         <input type="text" placeholder="Bạn đang tìm gì?">
                         <button type="button"><i class="ti-search"></i></button>
@@ -88,4 +110,4 @@
         }
 
     })
-</script>
+    </script>
