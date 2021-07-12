@@ -161,6 +161,10 @@ namespace WebsiteRaoVat.Controllers
             return pictureUrl;
         }
 
+   //     <!--App info id-->
+	  //<add key = "FbAppID" value="130002352542177" />
+	  //<add key = "FbAppSecret" value="3da05c78b33d77b1945c5b60087043a9" />
+
         public ActionResult FacebookCallback(string code)
         {
             var fb = new FacebookClient();
@@ -186,10 +190,10 @@ namespace WebsiteRaoVat.Controllers
 
                 var user = new TaiKhoan();
                 user.Username = email;
+                user.TenNguoiDung = firstname + " " + middlename + " " + lastname;
                 var a = GetMD5(email).ToString();
-                user.Password = email;
+                user.Password = a;
                 user.NgayThamGia = DateTime.Now;
-                user.Quyen = 3;
                 var anh = GetPictureUrl(id);
                 //SaveImage(anh, email, ImageFormat.Png);
 
@@ -218,7 +222,7 @@ namespace WebsiteRaoVat.Controllers
                     if (tv != null)
                     {
                         Session["userName"] = tv;
-                        return RedirectToAction("thu", "Login");
+                        return RedirectToAction("Index", "Home");
                     }
                 }
             }
@@ -282,6 +286,8 @@ namespace WebsiteRaoVat.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        
     }
 
 }

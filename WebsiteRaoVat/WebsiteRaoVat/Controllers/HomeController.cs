@@ -144,7 +144,7 @@ namespace WebsiteRaoVat.Controllers
             }
         }
 
-        public JsonResult getDanhSachSP()
+        public JsonResult getDanhSachSP(int trang)
         {
             try
             {
@@ -159,7 +159,9 @@ namespace WebsiteRaoVat.Controllers
                                   }).ToList();
                 //Lấy tin ưu tiên
 
-                return Json(new { code = 200, lstBaiDang = lstbaidang }, JsonRequestBehavior.AllowGet);
+                var trangSP = lstbaidang.Count() % 30 == 0 ? lstbaidang.Count() / 30 : lstbaidang.Count() / 30 + 1;
+                var kqpt = lstbaidang.Skip((trang - 1) * 30).Take(30).ToList();
+                return Json(new { code = 200, trangSP = trangSP, lstBaiDang = kqpt }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

@@ -37,39 +37,88 @@
             <h5 style="font-weight:700; margin:0rem 1.5rem">Tin đăng mới</h5>
             <div class="row" style="margin:0.5rem" id="frmSanPham">
                 <!--<div class="col-lg-2 col-sm-5 pn-product" style="padding:0px; padding:1rem">
-                    <div class="product-item">
-                        <div class="pi-pic">
-                            <img src="~/Images/anvat.jpg" />
-                            <div class="icon">
-                                <i class="icon_heart_alt"></i>
-                            </div>
-                        </div>
-                        <div class="pi-text">-->
-                            @*<div class="catagory-name">Shoes</div>*@
-                            <!--<a href="#">
-                                <h5>Guangzhou sweater</h5>
-                            </a>
-                            <div class="product-price">
-                                13.000
-                            </div>
-
-                        </div>
+            <div class="product-item">
+                <div class="pi-pic">
+                    <img src="~/Images/anvat.jpg" />
+                    <div class="icon">
+                        <i class="icon_heart_alt"></i>
                     </div>
-                </div>-->
+                </div>
+                <div class="pi-text">-->
+                @*<div class="catagory-name">Shoes</div>*@
+                <!--<a href="#">
+                        <h5>Guangzhou sweater</h5>
+                    </a>
+                    <div class="product-price">
+                        13.000
+                    </div>
+
+                </div>
+            </div>
+        </div>-->
 
             </div>
-
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="phanTrang">
+                </ul>
+            </nav>
         </div>
         
     </div>
 </section>
 
 <script>
+    var Trang = 1;
+
+    $('#phanTrang').on('click', 'li', function (e) {
+        e.preventDefault();
+        Trang = $(this).text();
+        LoadDSSP(Trang);
+
+    });
+    function LoadDSSP(Trang) {
+        $.ajax({
+            type: 'get',
+            url: '/Home/getDanhSachSP',
+            data: {
+                trang: Trang,
+            },
+            success: function (data) {
+                $('#frmSanPham').empty();
+                $.each(data.lstBaiDang, function (k, v) {
+                    var t = `<div class="col-lg-2 col-sm-5 pn-product" style="padding:0px; padding:1rem" name="frmSP" id="` + v.MaBaiDang + `">
+                        <div class="product-item">
+                            <div class="pi-pic">
+                                <img src="`+ v.HinhAnh + `" />
+                                <div class="icon">
+                                    <i class="icon_heart_alt" style="color:red"></i>
+                                </div>
+                            </div>
+                            <div class="pi-text">
+                                <a href="#">
+                                    <h5>`+ v.TieuDe + `</h5>
+                                </a>
+                                <div class="product-price">
+                                    `+ v.Gia + `
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    $('#frmSanPham').append(t);
+                });
+
+            }
+        });
+
+    }
     //getDanhSachSP
     $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/Home/getDanhSachSP',
+            data: {
+                trang: Trang,
+            },
             success: function (data) {
                 $('#frmSanPham').empty();
                 $.each(data.lstBaiDang, function (k, v) {
@@ -95,6 +144,13 @@
             </div>`;
                     $('#frmSanPham').append(t);
                 });
+                if (data.trangSP > 1) {
+                    for (i = 1; i <= data.trangSP; i++) {
+                        let li = '<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>';
+                        $('#phanTrang').append(li);
+                    }
+
+                }
             }
         });
         $(document).on('click', "div[name = 'frmSP']", function () {
