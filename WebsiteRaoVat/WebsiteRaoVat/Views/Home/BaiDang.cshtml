@@ -66,7 +66,7 @@
                         {
                             <img src="~/Images/img_avatar.png" class="img-dm" width="50" height="50" style="padding:0" />
                         }
-                        
+
                     </div>
                     <div class="col-6">
                         <h5 style="font-weight:700; margin-top:0">@Model.TaiKhoan.TenNguoiDung</h5>
@@ -81,6 +81,15 @@
                         CHAT VỚI NGƯỜI BÁN
                     </button>
                 </div>
+                @if (Model.TaiKhoan.SDT != null)
+                {
+                    <div class="row" style="margin-top:0.5rem">
+
+                        <button class="btn" style="width: 100%; border: solid 1px #28a745; color: #28a745 ">
+                            @Model.TaiKhoan.SDT
+                        </button>
+                    </div>
+                }
                 <div class="row" style="margin-top:2rem">
                     <table class="table table-borderless">
                         <tbody>
@@ -104,6 +113,13 @@
                                 <th scope="row">Ngày đăng</th>
                                 <td>@Model.NgayDang</td>
                             </tr>
+                            @if (Model.TaiKhoan.DiaChi != null)
+                            {
+                                <tr>
+                                    <th scope="row">Địa chỉ</th>
+                                    <td>@Model.TaiKhoan.DiaChi</td>
+                                </tr>
+                            }
                             <tr>
                                 <th scope="row">Mô tả</th>
 
@@ -128,26 +144,7 @@
         <div class="container" style="background-color:#fff; padding:1rem">
             <h5 style="font-weight:700; margin:0rem 1.5rem">Tin liên quan</h5>
             <div class="row" style="margin:0.5rem" id="frmSanPham">
-                @*<div class="col-lg-2 col-sm-5 pn-product" style="padding:0px; padding:1rem">
-                        <div class="product-item">
-                            <div class="pi-pic">
-                                <img src="~/Images/anvat.jpg" />
-                                <div class="icon">
-                                    <i class="icon_heart_alt"></i>
-                                </div>
-                            </div>
-                            <div class="pi-text">
-                    <div class="catagory-name">Shoes</div>
-                    <a href="#">
-                                    <h5>Guangzhou sweater</h5>
-                                </a>
-                                <div class="product-price">
-                                    13.000
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>*@
+               
             </div>
             
         </div>

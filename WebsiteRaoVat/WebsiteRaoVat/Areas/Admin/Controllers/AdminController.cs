@@ -319,7 +319,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             //ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             //ViewBag.tongbaiviet = sobaiviet();
             //ViewBag.tongsl = Songuoithamgia();
-            var listBV = db.BaiDangs.Where(x => x.TrangThai == 2).ToList();
+            var listBV = db.BaiDangs.Where(x => x.TrangThai == 2).OrderByDescending(x=>x.NgayDang).ToList();
             return View(listBV);
         }
         [HttpGet]

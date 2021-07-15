@@ -180,5 +180,22 @@ namespace WebsiteRaoVat.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult XoaHoiThoai(string username)
+        {
+            try
+            {
+                TaiKhoan taikhoan = (TaiKhoan)Session["TaiKhoan"];
+                var hoithoai = (from h in db.CuoiHoiThoais
+                                where (h.NguoiGui == taikhoan.Username && h.NguoiNhan == username) || (h.NguoiNhan == taikhoan.Username && h.NguoiGui == username)
+                                select h);
+                db.CuoiHoiThoais.RemoveRange(hoithoai);
+                db.SaveChanges();
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }   
 }

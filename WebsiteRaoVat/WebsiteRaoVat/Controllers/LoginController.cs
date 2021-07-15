@@ -285,6 +285,35 @@ namespace WebsiteRaoVat.Controllers
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult GoogleLogin(string Username, string TenNguoiDung,string Email, string Hinh)
+        {
+            try
+            {
+                var taikhoan = (from c in db.TaiKhoans where c.Username == Username select c).FirstOrDefault();
+                if (taikhoan != null)
+                {
+                    Session["TaiKhoan"] = taikhoan;
+                }
+                else
+                {
+                    TaiKhoan tk = new TaiKhoan();
+                    tk.Username = Username;
+                    tk.TenNguoiDung = TenNguoiDung;
+                    tk.Email = Email;
+                    tk.Hinh = Hinh;
+                    tk.NgayThamGia = DateTime.Now;
+                    db.TaiKhoans.Add(tk);
+                    db.SaveChanges();
+                    Session["TaiKhoan"] = tk;
+                }
+                
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 
 }

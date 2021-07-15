@@ -129,7 +129,7 @@ namespace WebsiteRaoVat.Controllers
             ViewBag.TenNguoiDung = taikhoan.TenNguoiDung;
             if(taikhoan.Hinh == null)
             {
-                ViewBag.Hinh = "~/Images/img_avatar.png";
+                ViewBag.Hinh = "/Images/img_avatar.png";
             }
             else
             {
@@ -158,13 +158,23 @@ namespace WebsiteRaoVat.Controllers
                               select new {
                                   MaBaiDang = baidang.MaBaiDang,
                                   TieuDe = baidang.TieuDe,
-                                  Gia = baidang.Gia.GetValueOrDefault(0).ToString("N0"),
+                                  Gia = baidang.Gia,
                                   HinhAnh = baidang.HinhAnh,
                                   TrangThai = baidang.TrangThai,
                                   NgayHetHan = gop?.NgayHetHan ?? null
                               }).ToList();
+                var lst1 = (from baidang in lstGop
+                              select new
+                              {
+                                  MaBaiDang = baidang.MaBaiDang,
+                                  TieuDe = baidang.TieuDe,
+                                  Gia = baidang.Gia.GetValueOrDefault(0).ToString("N0"),
+                                  HinhAnh = baidang.HinhAnh,
+                                  TrangThai = baidang.TrangThai,
+                                  NgayHetHan = baidang.NgayHetHan.ToString()
+                              }).ToList();
                 //Console.WriteLine(lstGop);
-                return Json(new { code = 200, lstBaiDang = lstGop }, JsonRequestBehavior.AllowGet);
+                return Json(new { code = 200, lstBaiDang = lst1 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

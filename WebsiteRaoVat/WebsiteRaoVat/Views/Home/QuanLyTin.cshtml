@@ -9,7 +9,7 @@
         <div class="row" style="background-color:#fff; margin:1px; padding:1rem 3rem">
 
             <div class="col-2" style="object-fit:cover; padding:0.5rem ">
-                <img src="@ViewBag.Hinh" style="border-radius: 50%" />
+                <img src="@ViewBag.Hinh" style="border-radius: 50%; height:150px; width:150px" />
             </div>
             <div class="col-6" style="margin-top:2rem">
                 <h4 style="font-weight:700; margin-bottom:0.5rem">
@@ -139,18 +139,19 @@
                 $.each(data.lstBaiDang, function (k, v) {
                     var content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem 1rem ;" >
             <div class="col-2"  style="object-fit:cover; padding:0.5rem; ">
-                <img src="`+ v.HinhAnh + `" />
+                <img src="`+ v.HinhAnh + `" style="height:150px" />
             </div>
             <div class="col-6" style="padding:0.5rem;">
                 <h4 style="margin-bottom:5px">`+ v.TieuDe + `</h4>
                 <h4 style="color:red; font-weight:700">`+ v.Gia + `đ</h4>`
-                    if (v.NgayHetHan == null) {
+                    if (v.NgayHetHan == "") {
                         content += `<button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="` + v.MaBaiDang + `">Quảng cáo</button>`;
                         content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
                     }
                     else {
                         content += `<button style="bottom:0px;" class="btn btn-info">Đang quảng cáo</button>`;
-                        content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
+                        content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>
+                                        <p>Ngày hết hạn: `+ v.NgayHetHan + `</p>`;
                     }
                     content+=`
             </div>
@@ -178,20 +179,20 @@
                 $.each(data.lstBaiDang, function (k, v) {
                     var content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem 1rem ;" >
             <div class="col-2"  style="object-fit:cover; padding:0.5rem; ">
-                <img src="`+ v.HinhAnh + `" />
+                <img src="`+ v.HinhAnh + `" style="height:150px"/>
             </div>
             <div class="col-6" style="padding:0.5rem;">
                 <h4 styssle="margin-bottom:5px">`+ v.TieuDe + `</h4>
                 <h4 style="color:red; font-weight:700">`+ v.Gia + `đ</h4>`;
                     if (v.TrangThai == 0) {
-                        if (v.NgayHetHan == null) {
+                        if (v.NgayHetHan == "") {
                             content += `<button style="bottom:0px;" class="btn btn-success" name="btnQuangCao" id="` + v.MaBaiDang + `">Quảng cáo</button>`;
                             content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>`;
                         }
                         else {
                             content += `<button style="bottom:0px;" class="btn btn-info">Đang quảng cáo</button>`;
                             content += `<button style="bottom:0px;" class="btn btn-secondary" name="btnHide" id="` + v.MaBaiDang + `">Ẩn tin</button>
-                                        `;
+                                        <p>Ngày hết hạn: `+ v.NgayHetHan + `</p>`;
                         }
                     }
                     if (v.TrangThai == 1) {
