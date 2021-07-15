@@ -22,5 +22,8 @@ namespace WebsiteRaoVat.Models
         public string NoiDung { get; set; }
 
         public DateTime? ThoiGianGui { get; set; }
+
+        [Column(TypeName = "text")]
+        public string Hinh { get; set; }
     }
 }

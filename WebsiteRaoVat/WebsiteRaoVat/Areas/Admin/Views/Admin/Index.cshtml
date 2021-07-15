@@ -42,8 +42,8 @@
                 <div class="col-sm-6 pl-sm-2 statistics-grid">
                     <div class="card card_border border-primary-top p-4">
                         <i class="lnr lnr-cart"> </i>
-                        <h3 class="text-danger number">1,250k</h3>
-                        <p class="stat-text">Số lượng quảng cáo</p>
+                        <h3 class="text-danger number">@ViewBag.tongqcao</h3>
+                        <p class="stat-text">Số lượng bài viết quảng cáo</p>
                     </div>
                 </div>
             </div>
@@ -51,29 +51,14 @@
     </div>
     <div class="chart">
         <div class="row">
-            <div class="col-lg-6 pr-lg-2 chart-grid">
-                <div class="card text-center card_border">
-                    <div class="card-header chart-grid__header">
-                        Bar Chart
-                    </div>
-                    <div class="card-body">
-                        <div id="container">
-                            <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                            <canvas id="barchart" width="1032" height="516" style="display: block; height: 344px; width: 688px;" class="chartjs-render-monitor"></canvas>
-                        </div>
-                    </div>                   
-                </div>
-            </div>
+
             <div class="col-lg-6 pl-lg-2 chart-grid">
                 <div class="card text-center card_border">
-                    <div class="card-header chart-grid__header">
-                        Line chart 2021
 
-                    </div>
-                    <div id="curve_chart" style="width: 600px; height: 300px"></div>
-                    
+                    <div id="curve_chart" style="width: 1180px; height: 500px"></div>
+
                 </div>
             </div>
         </div>
     </div>
-
+</div>

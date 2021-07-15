@@ -94,12 +94,19 @@
             border: initial;
             overflow: hidden !important;
         }
-
+    .imgpr {
+        min-width: 100%;
+        object-fit: cover;
+        height: 150px;
+        width: 150px;
+    }
 </style>
 @section Jsfooter{
     <script>
         var img = ["NULL","NULL","NULL","NULL","NULL"];
+        //var img = [];
         var i = 0;
+        var dem = 0;
         $(document).ready(function () {
             $("#MaDanhMuc").change(function () {
                 $.ajax({
@@ -120,7 +127,7 @@
             });
 
             $('#txtimg').change(function () {
-                if (i < 5) {
+                if (dem < 5) {
                     if ($('#txtimg').val().length > 0) {
                         if (window.FormData !== undefined) {
                             var fileupload = $('#txtimg').get(0);
@@ -134,14 +141,17 @@
                                 processData: false,//Khong Xu Ly Du Lieu
                                 data: formdata,
                                 success: function (ImageData) {
-                                    $('#imgPro').append(`<div class="col-3" id="` + i +`" style="object-fit:cover;">
-                                        <img src="` + ImageData + `"/>
+                                    $('#imgPro').append(`<div class="col-3" id="` + i +`" >
+                                        <img class="imgpr" src="` + ImageData + `"/>
                                         <div class="_13mC4" name="`+i+`" style="right: 13.8604px; top: 0px;">
                                                     X
                                             </div></div>`);
                                         img[i] = ImageData;
-                                        //location.reload();
-                                        i++;
+                                        
+                                        //img.push(ImageData);
+                                    i++;
+                                    dem++;
+                                    //console.log(img);
                                 }
                             });
                         }
@@ -156,30 +166,56 @@
         });
         $(document).on('click', '._13mC4', function () {
             $('#' + $(this).attr("name")).remove();
+            img[$(this).attr("name")] = "NULL";
+            dem--;
+            img.push("NULL");
+            //console.log(img);
             //img[$(this).attr("name")] = "NULL";
             //alert(img[$(this).attr("name")])
-        })
+            //i = i - 1;
+            
+        });
+        var hinh = [];
+        var hinh1 = ["NULL", "NULL", "NULL", "NULL", "NULL"];
+        function XuLiFileHinh() {
+            for (var j = 0; j < img.length; j++) {
+                if (img[j] != "NULL") {
+                    hinh.push(img[j]);
+                }
+            }
+            for (var k = 0; k < hinh.length; k++) {
+                hinh1[k] = hinh[k];
+            }
+        }
         function AddBaiDang() {
             //alert(img[0] + "" + img[1]);
-            $.ajax({              
-                url: '/Home/AddBaiDang',
-                type:'post',
-                data: {
-                    MaLoaiSP: $("#LoaiSP").val(),
-                    TieuDe: $("#TieuDe").val(),
-                    Gia: $("#Gia").val(),
-                    TinhTrang: $("#TinhTrang").val(),
-                    MoTa: $("#MoTa").val(),
-                    Hinh: img[0], 
-                    Hinh1: img[1],
-                    Hinh2: img[2],
-                    Hinh3: img[3],
-                    Hinh4: img[4]
-                },
-                success: function (data) {
-                    alert("Đăng thành công");
-                }
-            });
+            XuLiFileHinh();
+            console.log(hinh1);
+            console.log(dem);
+            if (dem <= 0) {
+                alert("Bạn phải đăng ít nhất một hình");
+            } else {
+                $.ajax({
+                    url: '/Home/AddBaiDang',
+                    type: 'post',
+                    data: {
+                        MaLoaiSP: $("#LoaiSP").val(),
+                        TieuDe: $("#TieuDe").val(),
+                        Gia: $("#Gia").val(),
+                        TinhTrang: $("#TinhTrang").val(),
+                        MoTa: $("#MoTa").val(),
+                        Hinh: hinh1[0],
+                        Hinh1: hinh1[1],
+                        Hinh2: hinh1[2],
+                        Hinh3: hinh1[3],
+                        Hinh4: hinh1[4]
+                    },
+                    success: function (data) {
+                        alert("Đăng thành công");
+                    }
+                });
+            }
         };
+        //(int MaLoaiSP, string TieuDe, long Gia, bool TinhTrang, string MoTa, string Hinh, string Hinh1, string Hinh2, string Hinh3, string Hinh4)
     </script>    
 }

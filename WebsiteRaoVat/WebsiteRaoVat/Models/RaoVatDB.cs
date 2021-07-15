@@ -55,6 +55,10 @@ namespace WebsiteRaoVat.Models
                 .Property(e => e.NguoiNhan)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<CuoiHoiThoai>()
+                .Property(e => e.Hinh)
+                .IsUnicode(false);
+
             modelBuilder.Entity<DanhMuc>()
                 .Property(e => e.Hinh)
                 .IsUnicode(false);

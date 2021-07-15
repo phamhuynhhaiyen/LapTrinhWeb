@@ -4,19 +4,35 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="py-3" style="margin-top:10%">
+<section class="py-3" style="margin-top:11%">
     <div class="container">
         <div class="row" style="background-color:#fff; margin:1px;">
 
             <div class="col-6">
                 <div class="row" style="padding:1rem">
                     <div class="col-3" style="padding:0">
-                        <img src="~/Images/img_avatar.png" class="img-dm" width="100" height="100" style="padding:0" />
+                        @if (Model.Hinh != null)
+                        {
+                            <img src="@Model.Hinh" style="object-fit:cover; border-radius:50%" />
+                        }
+                        else
+                        {
+                            <img src="~/Images/img_avatar.png" style="object-fit: cover; border-radius: 50%" />
+                        }
                     </div>
                     <div class="col-8">
                         <h4 style="font-weight:800; margin-top:10px">@Model.TenNguoiDung</h4>
-                        <p>@Model.Username</p>
-                        <input hidden id="txtUsername" value="@Model.Username"/>
+                        <p style=" margin-bottom: 0px">@Model.Username</p>
+                        <input hidden id="txtUsername" value="@Model.Username" />
+                        @if (Session["TaiKhoan"] != null)
+                        {
+                            WebsiteRaoVat.Models.TaiKhoan taikhoan = (WebsiteRaoVat.Models.TaiKhoan)Session["TaiKhoan"];
+                            if (taikhoan.Username == Model.Username)
+                            {
+                                <a class="btn" href="/TinDang/SuaTrangCaNhan/@Model.Username" style="border-radius: 35px; border: solid 2px #d1d1d1;">Chỉnh sửa trang cá nhân</a>
+                            }
+                        }
+
                     </div>
 
                 </div>

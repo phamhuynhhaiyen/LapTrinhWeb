@@ -55,13 +55,13 @@ namespace WebsiteRaoVat
             //   consumerSecret: "");
 
             //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            //   appId: "130002352542177",
+            //   appSecret: "3da05c78b33d77b1945c5b60087043a9");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
-            //    ClientId = "",
-            //    ClientSecret = ""
+            //    ClientId = "402787411977-kd8ueha928qp7058dt5mn59p40lrln0s.apps.googleusercontent.com",
+            //    ClientSecret = "h5eG6bTJ74dkJfosqL69Dc1p"
             //});
         }
     }

@@ -94,6 +94,26 @@ namespace WebsiteRaoVat.Controllers
             return "/Images/" + file.FileName;
 
         }
+        public string XuLyFileHinh(HttpPostedFileBase file)
+        {
+            TaiKhoan taikhoan = (TaiKhoan)Session["TaiKhoan"];
+
+            string path = Server.MapPath("~/Images/" + file.FileName);
+            try
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+                file.SaveAs(path);
+            }
+            catch { }
+            var tk = (from t in db.TaiKhoans where t.Username == taikhoan.Username select t).FirstOrDefault();
+            tk.Hinh = "/Images/" + file.FileName;
+            db.SaveChanges();
+            return "/Images/" + file.FileName;
+
+        }
         public ActionResult Menu()
         {
             TaiKhoan taikhoan = (TaiKhoan) Session["TaiKhoan"];
@@ -107,6 +127,14 @@ namespace WebsiteRaoVat.Controllers
         {
             TaiKhoan taikhoan = (TaiKhoan)Session["TaiKhoan"];
             ViewBag.TenNguoiDung = taikhoan.TenNguoiDung;
+            if(taikhoan.Hinh == null)
+            {
+                ViewBag.Hinh = "~/Images/img_avatar.png";
+            }
+            else
+            {
+                ViewBag.Hinh = taikhoan.Hinh;
+            }
             return View();
         }
         public JsonResult getBaiDang(int TrangThai)
@@ -197,7 +225,7 @@ namespace WebsiteRaoVat.Controllers
             try
             {
                 List<BaiDang> lst = (from b in db.BaiDangs
-                              where b.LoaiSanPham.MaDanhMuc == madanhmuc
+                              where b.LoaiSanPham.MaDanhMuc == madanhmuc && b.TrangThai == 0
                               select b).ToList();
                 List<BaiDang> baidang = (from b in db.BaiDangs
                                         where b.MaBaiDang == mabaidang

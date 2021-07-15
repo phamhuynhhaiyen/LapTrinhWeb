@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using WebsiteRaoVat.Models;
@@ -17,8 +19,10 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             int nam = 2021;
 
             //ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
+            ViewBag.tongqcao = quangcao();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
+            ViewBag.tongqcao = quangcao();
 
             ViewBag.T1 = tongbaiviet(nam);
             ViewBag.T2 = tongbaiviet2(nam);
@@ -29,26 +33,27 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.T7 = tongbaiviet7(nam);
             ViewBag.T8 = tongbaiviet8(nam);
             ViewBag.T9 = tongbaiviet9(nam);
-            ViewBag.T10 = tongbaiviet10(nam); 
-            ViewBag.T11 = tongbaiviet11(nam); 
-            ViewBag.T12= tongbaiviet12(nam);
+            ViewBag.T10 = tongbaiviet10(nam);
+            ViewBag.T11 = tongbaiviet11(nam);
+            ViewBag.T12 = tongbaiviet12(nam);
 
             ViewBag.thang1 = tongnguoithamgia(nam);
             ViewBag.thang2 = tongnguoithamgia2(nam);
             ViewBag.thang3 = tongnguoithamgia3(nam);
             ViewBag.thang4 = tongnguoithamgia4(nam);
-            ViewBag.thang5= tongnguoithamgia5(nam);
+            ViewBag.thang5 = tongnguoithamgia5(nam);
             ViewBag.thang6 = tongnguoithamgia6(nam);
             ViewBag.thang7 = tongnguoithamgia7(nam);
             ViewBag.thang8 = tongnguoithamgia8(nam);
             ViewBag.thang9 = tongnguoithamgia9(nam);
             ViewBag.thang10 = tongnguoithamgia10(nam);
             ViewBag.thang11 = tongnguoithamgia11(nam);
-            ViewBag.thang12= tongnguoithamgia12(nam);
+            ViewBag.thang12 = tongnguoithamgia12(nam);
             return View();
         }
 
-            public ActionResult Index() {
+        public ActionResult Index()
+        {
             int nam = 2021;
             ViewBag.T1 = tongbaiviet(nam);
             ViewBag.T2 = tongbaiviet2(nam);
@@ -78,10 +83,12 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
+            ViewBag.tongqcao = quangcao();
             return View();
         }
         public ActionResult DanhMuc()
         {
+            ViewBag.tongqcao = quangcao();
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
@@ -90,6 +97,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult ThemDanhMuc()
         {
+            ViewBag.tongqcao = quangcao();
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
@@ -122,6 +130,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult SuaDanhMuc(int? id)
         {
+            ViewBag.tongqcao = quangcao();
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
@@ -135,7 +144,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-           
+
 
             return View(dm);
         }
@@ -163,8 +172,8 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
-      
+
+
         [HttpPost]
         public JsonResult XoaDanhMucSanPham(int madanhmuc)
         {
@@ -181,10 +190,11 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
 
         public ActionResult LoaiSP()
         {
+            ViewBag.tongqcao = quangcao();
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
@@ -193,10 +203,11 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult ThemLoaiSP()
         {
+            ViewBag.tongqcao = quangcao();
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
-            ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc),"MaDanhMuc", "TenDanhMuc");
+            ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc");
             return View();
 
         }
@@ -226,6 +237,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult SuaLoaiSP(int? id)
         {
+            ViewBag.tongqcao = quangcao();
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
@@ -255,7 +267,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 loaiSanPham.TenLoaiSP = Ten;
                 //if (Hinh != null)
                 //{
-                    loaiSanPham.Hinh = Hinh;
+                loaiSanPham.Hinh = Hinh;
                 //}
                 //db.LoaiSanPhams.Add(loaiSanPham);
                 //db.Entry(loaiSanPham).State = System.Data.Entity.EntityState.Modified;
@@ -321,7 +333,7 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             //    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
 
             //}
-          BaiDang baiDang = db.BaiDangs.SingleOrDefault(c => c.MaBaiDang == id);
+            BaiDang baiDang = db.BaiDangs.SingleOrDefault(c => c.MaBaiDang == id);
             if (baiDang == null)
             {
                 return HttpNotFound();
@@ -340,31 +352,59 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 var baidang = (from c in db.BaiDangs where c.MaBaiDang == mabaidang select c).FirstOrDefault();
                 baidang.TrangThai = trangthai;
                 db.SaveChanges();
-                return Json(new { code = 200}, JsonRequestBehavior.AllowGet);
+                string content = "<p>Tiêu đề: "+baidang.TieuDe+ "</p><p>Loại sản phẩm: " + baidang.LoaiSanPham.TenLoaiSP + "</p><p>Ngày đăng: " + baidang.NgayDang + "</p><p>Giá: " + baidang.Gia.GetValueOrDefault(0).ToString("N0") + " đ</p><p>Mô tả: " + baidang.MoTa + "</p>";
+                //Được duyệt
+                if (baidang.TaiKhoan.Email != null)
+                {
+                    if (trangthai == 0)
+                    {
+                        SendEmail(baidang.TaiKhoan.Email, "Bài đăng của bạn đã được duyệt", content);
+                    }
+                    //Từ chối
+                    else
+                    {
+                        SendEmail(baidang.TaiKhoan.Email, "Bài đăng của bạn đã bị từ chối", content);
+                    }
+                }
+
+                return Json(new { code = 200 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 return Json(new { code = 500, msg = "Không thành công" + e.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        //[HttpPost]
-        //public ActionResult DuyetBaiViet(BaiDang baidang)
-        //{
-        //    var bai= db.BaiDangs.SingleOrDefault(c => c.MaBaiDang == baidang.MaBaiDang);
-        //    bai.TrangThai = baidang.TrangThai;
-            
-        //    db.SaveChanges();
+        public void SendEmail(string address, string subject, string message)
+        {
+            string email = "websiteraovatne@gmail.com";
+            string password = "websiteraovat";
 
-        //    var listBaiViet = db.BaiDangs.Where(c => c.MaBaiDang == baidang.MaBaiDang);
-        //    ViewBag.ListBaiViet = listBaiViet;
+            var loginInfo = new NetworkCredential(email, password);
+            var msg = new System.Net.Mail.MailMessage();
+            var smtpClient = new SmtpClient("smtp.gmail.com", 587);
 
-        //    return RedirectToAction("DSBaiViet", "Admin");
-        //}
+            msg.From = new MailAddress(email);
+            msg.To.Add(new MailAddress(address));
+            msg.Subject = subject;
+            msg.Body = message;
+            msg.IsBodyHtml = true;
+
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = loginInfo;
+            smtpClient.Send(msg);
+        }
         public int Songuoithamgia()
         {
             int tongnguoi = db.TaiKhoans.Count();
             ViewBag.tongsl = tongnguoi;
             return tongnguoi;
+        }
+        public int quangcao()
+        {
+            int tongqc = db.QuangCaos.Count();
+            ViewBag.tongqcao = tongqc;
+            return tongqc;
         }
         public int sobaiviet()
         {
@@ -374,167 +414,167 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
         }
 
 
-        public int tongbaiviet( int nam)
+        public int tongbaiviet(int nam)
         {
-           
+
             int t1 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 1 && c.NgayDang.Value.Year == nam).Count();
-        
+
             return t1;
         }
         public int tongbaiviet2(int nam)
         {
 
             int t2 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 2 && c.NgayDang.Value.Year == nam).Count();
-          
+
             return t2;
         }
         public int tongbaiviet3(int nam)
         {
 
             int t3 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 3 && c.NgayDang.Value.Year == nam).Count();
-         
+
             return t3;
         }
         public int tongbaiviet4(int nam)
         {
 
-            int t4 = db.BaiDangs.Where(c => c.NgayDang.Value.Month ==4 && c.NgayDang.Value.Year == nam).Count();
-          
+            int t4 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 4 && c.NgayDang.Value.Year == nam).Count();
+
             return t4;
         }
-      
+
         public int tongbaiviet5(int nam)
         {
 
             int t5 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 5 && c.NgayDang.Value.Year == nam).Count();
-        
+
             return t5;
         }
         public int tongbaiviet6(int nam)
         {
 
             int t6 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 6 && c.NgayDang.Value.Year == nam).Count();
-   
+
             return t6;
         }
         public int tongbaiviet7(int nam)
         {
 
             int t7 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 7 && c.NgayDang.Value.Year == nam).Count();
-       
+
             return t7;
         }
         public int tongbaiviet8(int nam)
         {
 
             int t8 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 8 && c.NgayDang.Value.Year == nam).Count();
-         
+
             return t8;
         }
         public int tongbaiviet9(int nam)
         {
 
             int t9 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 9 && c.NgayDang.Value.Year == nam).Count();
-       
+
             return t9;
         }
         public int tongbaiviet10(int nam)
         {
 
             int t10 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 10 && c.NgayDang.Value.Year == nam).Count();
-          
+
             return t10;
         }
         public int tongbaiviet11(int nam)
         {
 
             int t11 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 11 && c.NgayDang.Value.Year == nam).Count();
-     
+
             return t11;
         }
         public int tongbaiviet12(int nam)
         {
 
             int t12 = db.BaiDangs.Where(c => c.NgayDang.Value.Month == 12 && c.NgayDang.Value.Year == nam).Count();
-       
+
             return t12;
         }
 
-       
-       
+
+
         public int tongnguoithamgia(int nam)
         {
 
-            int Thang1 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 1 && n.NgayThamGia.Value.Year == nam).Count();
-   
+            int Thang1 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 1 && n.NgayMua.Value.Year == nam).Count();
+
             return Thang1;
         }
         public int tongnguoithamgia2(int nam)
         {
-            int Thang2 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 2 && n.NgayThamGia.Value.Year == nam).Count();
-                return Thang2;
+            int Thang2 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 2 && n.NgayMua.Value.Year == nam).Count();
+            return Thang2;
         }
         public int tongnguoithamgia3(int nam)
         {
-            int Thang3 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 3 && n.NgayThamGia.Value.Year == nam).Count();
-     
+            int Thang3 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 3 && n.NgayMua.Value.Year == nam).Count();
+
             return Thang3;
         }
         public int tongnguoithamgia4(int nam)
         {
-            int Thang4 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 4 && n.NgayThamGia.Value.Year == nam).Count();
-        
+            int Thang4 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 4 && n.NgayMua.Value.Year == nam).Count();
+
             return Thang4;
         }
         public int tongnguoithamgia5(int nam)
         {
-            int Thang5 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 5 && n.NgayThamGia.Value.Year == nam).Count();
-  
+            int Thang5 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 5 && n.NgayMua.Value.Year == nam).Count();
+
             return Thang5;
         }
         public int tongnguoithamgia6(int nam)
         {
-            int Thang6 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 6 && n.NgayThamGia.Value.Year == nam).Count();
-  
+            int Thang6 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 6 && n.NgayMua.Value.Year == nam).Count();
+
             return Thang6;
         }
         public int tongnguoithamgia7(int nam)
         {
-            int Thang7 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 7 && n.NgayThamGia.Value.Year == nam).Count();
+            int Thang7 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 7 && n.NgayMua.Value.Year == nam).Count();
 
             return Thang7;
         }
 
         public int tongnguoithamgia8(int nam)
         {
-            int Thang8 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 8 && n.NgayThamGia.Value.Year == nam).Count();
+            int Thang8 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 8 && n.NgayMua.Value.Year == nam).Count();
             return Thang8;
         }
         public int tongnguoithamgia9(int nam)
         {
-            int Thang9 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 9&& n.NgayThamGia.Value.Year == nam).Count();
+            int Thang9 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 9 && n.NgayMua.Value.Year == nam).Count();
             return Thang9;
         }
         public int tongnguoithamgia10(int nam)
         {
-            int Thang10 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 10 && n.NgayThamGia.Value.Year == nam).Count();
-           
+            int Thang10 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 10 && n.NgayMua.Value.Year == nam).Count();
+
 
             return Thang10;
         }
-            public int tongnguoithamgia11(int nam)
-            {
-                int Thang11 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 11 && n.NgayThamGia.Value.Year == nam).Count();
-         
-                return Thang11;
-            }
+        public int tongnguoithamgia11(int nam)
+        {
+            int Thang11 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 11 && n.NgayMua.Value.Year == nam).Count();
+
+            return Thang11;
+        }
 
         public int tongnguoithamgia12(int nam)
         {
-            int Thang12 = db.TaiKhoans.Where(n => n.NgayThamGia.Value.Month == 2 && n.NgayThamGia.Value.Year == nam).Count();
-     
+            int Thang12 = db.QuangCaos.Where(n => n.NgayMua.Value.Month == 12 && n.NgayMua.Value.Year == nam).Count();
+
             return Thang12;
         }
-        
+
     }
 }

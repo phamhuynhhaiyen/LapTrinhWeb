@@ -28,8 +28,8 @@
 
                     </select>
                     <div class="input-group">
-                        <input type="text" placeholder="Bạn đang tìm gì?">
-                        <button type="button"><i class="ti-search"></i></button>
+                        <input type="text" id="txtTimKiem" placeholder="Bạn đang tìm gì?" value="">
+                        <button type="button" id="btnTimKiem"><i class="ti-search"></i></button>
                     </div>
                 </div>
             </div>
@@ -109,5 +109,11 @@
             $("#popup_login").show();
         }
 
+    })
+    $('#btnTimKiem').click(function () {
+        if ($('#txtTimKiem').val() != "") {
+            
+            window.location = "/TinDang/TimKiemTinDang/" + $('#txtTimKiem').val();
+        }
     })
     </script>

@@ -42,6 +42,7 @@ namespace WebsiteRaoVat.Controllers
                           }).ToList();
                 var lstbaidang = (from a in yt
                                   join b in db.BaiDangs on a.MaBaiDang equals b.MaBaiDang
+                                  where b.TrangThai == 0
                                   select new
                                   {
                                       MaBaiDang = a.MaBaiDang,
@@ -110,6 +111,28 @@ namespace WebsiteRaoVat.Controllers
             var tk = db.TaiKhoans.Where(x => x.Username == id).FirstOrDefault();
             return View(tk);
         }
+        public ActionResult SuaTrangCaNhan(string id)
+        {
+            var tk = db.TaiKhoans.Where(x => x.Username == id).FirstOrDefault();
+            return View(tk);
+        }
+        public JsonResult SuaThongTin(string username, string tennguoidung, string sdt, string diachi, string email)
+        {
+            try
+            {
+                var taikhoan = db.TaiKhoans.Where(x => x.Username == username).FirstOrDefault();
+                taikhoan.TenNguoiDung = tennguoidung;
+                taikhoan.SDT = sdt;
+                taikhoan.DiaChi = diachi;
+                taikhoan.Email = email;
+                db.SaveChanges();
+                return Json(new { code = 200}, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public JsonResult getTongSP(string username)
         {
             try
@@ -144,7 +167,7 @@ namespace WebsiteRaoVat.Controllers
 
             WebsiteRaoVat.Models.RaoVatDB DB = new WebsiteRaoVat.Models.RaoVatDB();
             List<BaiDang> baiDangs = new List<BaiDang>();
-            var tindau1 = db.QuangCaos.Where(x=>x.NgayHetHan>=DateTime.Now).ToList();
+            var tindau1 = db.QuangCaos.Where(x=>x.NgayHetHan>=DateTime.Now && x.BaiDang.MaLoaiSP == maloai).ToList();
             List<BaiDang> dangbai1 = new List<BaiDang>();
             var tinuutien = new List<BaiDang>();
             try
@@ -250,7 +273,7 @@ var listBaiDang = (from l in baiDangs.Where(x =>x.TrangThai==0 || x.TrangThai==1
             WebsiteRaoVat.Models.RaoVatDB DB = new WebsiteRaoVat.Models.RaoVatDB();
             List<BaiDang> baiDangs = new List<BaiDang>();
             var LoaiSP = DB.LoaiSanPhams.Where(X => X.MaDanhMuc == id).ToList();
-            var tindau1 = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now).ToList();
+            var tindau1 = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now && x.BaiDang.LoaiSanPham.MaDanhMuc == id).ToList();
             List<BaiDang> dangbai1 = new List<BaiDang>();
             var tinuutien = new List<BaiDang>();
             
@@ -375,7 +398,7 @@ var listBaiDang = (from l in baiDangs.Where(x =>x.TrangThai==0 || x.TrangThai==1
             WebsiteRaoVat.Models.RaoVatDB DB = new WebsiteRaoVat.Models.RaoVatDB();
             var LoaiSP = DB.LoaiSanPhams.Where(X => X.MaDanhMuc == id).ToList();
             List<BaiDang> baiDangs = new List<BaiDang>();
-            var tindau1 = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now).ToList();
+            var tindau1 = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now && x.BaiDang.LoaiSanPham.MaDanhMuc == id).ToList();
             List<BaiDang> dangbai1 = new List<BaiDang>();
             var tinuutien = new List<BaiDang>();
             try
@@ -515,7 +538,7 @@ var listBaiDang = (from l in baiDangs.Where(x =>x.TrangThai==0 || x.TrangThai==1
             WebsiteRaoVat.Models.RaoVatDB DB = new WebsiteRaoVat.Models.RaoVatDB();
             var LoaiSP = DB.LoaiSanPhams.Where(X => X.MaDanhMuc == id).ToList();
             List<BaiDang> baiDangs = new List<BaiDang>();
-            var tindau1 = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now).ToList();
+            var tindau1 = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now && x.BaiDang.LoaiSanPham.MaDanhMuc == id).ToList();
             List<BaiDang> dangbai1 = new List<BaiDang>();
             var tinuutien = new List<BaiDang>();
             try
@@ -683,6 +706,55 @@ var listBaiDang = (from l in baiDangs.Where(x =>x.TrangThai==0 || x.TrangThai==1
             {
                 return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+        public ActionResult TimKiemTinDang(string id)
+        {
+            ViewBag.TuKhoa = id;
+            return View();
+        }
+        public JsonResult TimKiem(string tukhoa)
+        {
+            //try
+            //{
+
+                RaoVatDB DB = new RaoVatDB();
+                List<BaiDang> baiDangs = new List<BaiDang>();
+                var tindau = db.QuangCaos.Where(x => x.NgayHetHan >= DateTime.Now && x.BaiDang.TieuDe.Contains(tukhoa) && x.BaiDang.TrangThai == 0).ToList();
+                
+                foreach(var item in tindau)
+                {
+                    baiDangs.Add(item.BaiDang);
+                }
+
+                var lstbai = (from l in tindau
+                              select new
+                              {
+                                  MaBaiDang = l.MaBaiDang,
+                                  Username = l.BaiDang.Username,
+                                  TieuDe = l.BaiDang.TieuDe,
+                                  Gia = l.BaiDang.Gia.GetValueOrDefault(0).ToString("N0"),
+                                  HinhAnh = l.BaiDang.HinhAnh,                                 
+                                  NgayDang = l.BaiDang.NgayDang.ToString()
+                              }).ToList();
+                List<BaiDang> list = (db.BaiDangs.Where(x => x.TieuDe.Contains(tukhoa) && x.TrangThai == 0)).ToList();
+                var list1 = list.Except(baiDangs);
+                var lstbai2 = (from l in list1
+                               select new
+                              {
+                                  MaBaiDang = l.MaBaiDang,
+                                  Username = l.Username,
+                                  TieuDe = l.TieuDe,
+                                  Gia = l.Gia.GetValueOrDefault(0).ToString("N0"),
+                                  HinhAnh = l.HinhAnh,
+                                  NgayDang = l.NgayDang.ToString()
+                              }).ToList();
+
+                return Json(new { code = 200, listbaidang = lstbai, listbaithuong = lstbai2 }, JsonRequestBehavior.AllowGet);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Json(new { code = 500, msg = ex.Message }, JsonRequestBehavior.AllowGet);
+            //}
         }
     }
 }

@@ -24,20 +24,21 @@
                 success: function (data) {
                     $('#frmDaiDang').empty();
                     $.each(data.listBaiDang, function (k, v) {
-                        var content = `<div class="row pn-product" name="frmSP" id="` + v.MaBaiDang +`" style="background-color:#fff; margin:1px; padding:0.5rem; width:100%" >
-            <div class="col-2" style="object-fit:fill; padding:0.5rem;">
+                        var content = `<div class="row pn-product" style="background-color:#fff; margin:1px; padding:0.5rem; width:100%" >
+           <div class="col-11" name="frmSP" id="` + v.MaBaiDang +`" > <div class="row"><div class="col-2" style="object-fit:fill; padding:0.5rem;">
                 <img src="`+ v.HinhAnh + `" />
             </div>
             <div class="col-6" style="padding:0.5rem;">
                 <h4 style="margin-bottom:5px">`+ v.TieuDe + `</h4>
                 <h4 style="color:red; font-weight:700">`+ v.Gia + `</h4>
-            </div>
-            <div class="col-4" style="padding:0.5rem; float:right">
+            </div></div></div>
+            <div class="col-1" style="padding:0.5rem; float:right">
                 <div class="icon" style="float:right;" name="frmyt" id="`+ v.MaBaiDang + `">
                     <i class="fa fa-heart" style="font-size:25px; color:red" ></i>
                 </div>
             </div>
-        </div>`;
+        </div>
+    `;
                         $('#frmDaiDang').append(content);
                     });
                 }

@@ -176,22 +176,27 @@
             });
         }
 
-        $(document).on('click', "div[name='frmyeuthi']", function () {
-            //alert($(this).attr('id'));
-            $.ajax({
-                type: 'post',
-                url: '/TinDang/ThemTinYeuThich',
-                data: {
-                    mabaidang: $(this).attr('id')
-                },
-                success: function (data) {
-                    if (data.code == 200) {
-                        alert("Đã thêm vào danh sách yêu thích");
-                        $(this).find('.icon_heart_alt').css({ 'color':'red'});
-                        //$.notify("Alert!", { align: "center", verticalAlign: "middle" });
+        $(document).on('click', "div[name='frmyeuthi']", function () {              
+            if ($("#session").val() == 1) {
+                $(this).empty();
+                $(this).append('<i class="fa fa-heart" style="font-size:25px; color:red" ></i>');
+                $.ajax({
+                    type: 'post',
+                    url: '/TinDang/ThemTinYeuThich',
+                    data: {
+                        mabaidang: $(this).attr('id')
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert("Đã thêm vào danh sách yêu thích");
+
+                            //$.notify("Alert!", { align: "center", verticalAlign: "middle" });
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                $("#popup_login").show();
+            }
             //window.location = '/TinDang/ThemTinYeuThich/' + $(this).attr('id');
 
         });

@@ -45,8 +45,11 @@ namespace WebsiteRaoVat.Controllers
                     }
                 }
             }
-            ViewBag.ChatUser = taiKhoans.First().Username;
-            ViewBag.Ten = taiKhoans.First().TenNguoiDung;
+            if(taiKhoans.Count > 0)
+            {
+                ViewBag.ChatUser = taiKhoans.First().Username;
+                ViewBag.Ten = taiKhoans.First().TenNguoiDung;
+            }
             //return View(taiKhoans.First());
             return View();
         }
@@ -57,7 +60,7 @@ namespace WebsiteRaoVat.Controllers
             {
                 TaiKhoan taikhoan = (TaiKhoan)Session["TaiKhoan"];             
                 var hoithoai = (from h in db.CuoiHoiThoais
-                                where (h.NguoiGui == taikhoan.Username && h.NguoiNhan == username && h.NoiDung != null)|| (h.NguoiNhan == taikhoan.Username && h.NguoiGui == username && h.NoiDung != null) 
+                                where (h.NguoiGui == taikhoan.Username && h.NguoiNhan == username)|| (h.NguoiNhan == taikhoan.Username && h.NguoiGui == username) 
                                 select h);
                 //SqlDependency dependency = new SqlDependency();
                 return Json(new { code = 200, listhoithoai = hoithoai}, JsonRequestBehavior.AllowGet);
@@ -99,7 +102,7 @@ namespace WebsiteRaoVat.Controllers
                         }
                     }
                 }
-                var c = (from v in taiKhoans select new { Username = v.Username, TenNguoiDung = v.TenNguoiDung }).ToList();
+                var c = (from v in taiKhoans select new { Username = v.Username, TenNguoiDung = v.TenNguoiDung , Hinh = v.Hinh}).ToList();
                 return Json(new { code = 200, listtaikhoan = c }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -151,7 +154,7 @@ namespace WebsiteRaoVat.Controllers
         //{
         //    CuocHoiThoaiHub.Show();
         //}
-        public JsonResult AddMessage(string username, string noidung)
+        public JsonResult AddMessage(string username, string noidung, string hinh)
         {
             try
             {
@@ -163,7 +166,10 @@ namespace WebsiteRaoVat.Controllers
                 {
                     ht.NoiDung = noidung;
                 }
-               
+                if (hinh != "")
+                {
+                    ht.Hinh = hinh;
+                }
                 ht.ThoiGianGui = DateTime.Now;
                 db.CuoiHoiThoais.Add(ht);
                 db.SaveChanges();
