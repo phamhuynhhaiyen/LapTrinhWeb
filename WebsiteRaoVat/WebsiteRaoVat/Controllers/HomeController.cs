@@ -186,7 +186,7 @@ namespace WebsiteRaoVat.Controllers
         {
             try
             {
-                var lstbaidang = (from b in db.BaiDangs.Where(x => x.TrangThai == 0).OrderBy(x => x.NgayDang).ToList()
+                var lstbaidang = (from b in db.BaiDangs.Where(x => x.TrangThai == 0).OrderByDescending(x => x.NgayDang).ToList()
                                   select new
                                   {
                                       MaBaiDang = b.MaBaiDang,
@@ -448,6 +448,12 @@ namespace WebsiteRaoVat.Controllers
             db.SaveChanges();
             return Json(new { code = 200}, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult NotAuthorize()
+        {
+            return View();
+        }
     }
+
     
 }

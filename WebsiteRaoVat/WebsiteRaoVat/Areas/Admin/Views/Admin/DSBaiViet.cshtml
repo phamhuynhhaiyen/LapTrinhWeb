@@ -38,10 +38,10 @@
                     iTrang++;
                 }
                 <tr id="@item.MaBaiDang" class="@Url.Content("SoTrangChua SoTrang" + iTrang.ToString())">
-                    <td>@item.Username</td>
+                    <td>@item.TaiKhoan.TenNguoiDung</td>
                     <td>@item.LoaiSanPham.TenLoaiSP</td>
                     <td>@item.TieuDe</td>
-                    <td>@item.Gia</td>
+                    <td>@item.Gia.GetValueOrDefault(0).ToString("N0")</td>
 
                     @if (item.TinhTrang == false)
                     {

@@ -49,6 +49,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.thang10 = tongnguoithamgia10(nam);
             ViewBag.thang11 = tongnguoithamgia11(nam);
             ViewBag.thang12 = tongnguoithamgia12(nam);
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View();
         }
 
@@ -84,6 +96,20 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
             ViewBag.tongqcao = quangcao();
+
+             TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
+
             return View();
         }
         public ActionResult DanhMuc()
@@ -92,6 +118,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View(db.DanhMucs);
         }
         [HttpGet]
@@ -101,6 +139,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View();
 
         }
@@ -145,7 +195,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return HttpNotFound();
             }
 
-
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View(dm);
         }
         [HttpPost]
@@ -198,6 +259,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.Soluongtruycap = HttpContext.Application["Soluongtruycap"].ToString();
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View(db.LoaiSanPhams);
         }
         [HttpGet]
@@ -208,6 +281,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             ViewBag.tongbaiviet = sobaiviet();
             ViewBag.tongsl = Songuoithamgia();
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc");
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View();
 
         }
@@ -253,7 +338,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
                 return HttpNotFound();
             }
             ViewBag.MaDanhMuc = new SelectList(db.DanhMucs.OrderBy(c => c.TenDanhMuc), "MaDanhMuc", "TenDanhMuc", loaiSP.MaDanhMuc);
-
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View(loaiSP);
         }
 
@@ -320,6 +416,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             //ViewBag.tongbaiviet = sobaiviet();
             //ViewBag.tongsl = Songuoithamgia();
             var listBV = db.BaiDangs.Where(x => x.TrangThai == 2).OrderByDescending(x=>x.NgayDang).ToList();
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View(listBV);
         }
         [HttpGet]
@@ -340,7 +448,18 @@ namespace WebsiteRaoVat.Areas.Admin.Controllers
             }
             var listBaiViet = db.BaiDangs.Where(c => c.MaBaiDang == id);
             ViewBag.ListBaiViet = listBaiViet;
-
+            TaiKhoan session = (TaiKhoan)Session["TaiKhoan"];
+            if (session == null)
+            {
+                return Redirect("/Home/Index");
+            }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    return Redirect("/Home/NotAuthorize");
+                }
+            }
             return View(baiDang);
 
         }

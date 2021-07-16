@@ -95,7 +95,7 @@
                         </tr>
                         <tr>
                             <th scope="row">Giá</th>
-                            <td>@Model.Gia</td>
+                            <td>@Model.Gia.GetValueOrDefault(0).ToString("N0")</td>
                         </tr>
                         <tr>
                             <th scope="row">Mô tả</th>

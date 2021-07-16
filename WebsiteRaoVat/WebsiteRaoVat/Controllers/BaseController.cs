@@ -17,6 +17,15 @@ namespace WebsiteRaoVat.Controllers
                 filterContext.Result = new RedirectToRouteResult(
                 new System.Web.Routing.RouteValueDictionary(new { controller = "Home", action = "Index" }));
             }
+            else
+            {
+                if (session.Quyen != 1)
+                {
+                    
+                    filterContext.Result = new RedirectToRouteResult(
+                    new System.Web.Routing.RouteValueDictionary(new { controller = "Home", action = "NotAuthorize" }));
+                    }
+            }
 
             base.OnActionExecuting(filterContext);
         }

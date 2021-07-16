@@ -22,7 +22,7 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Tháng', 'Số lượng bài viết', 'Số lượng thành viên'],
+                ['Tháng', 'Số lượng bài viết', 'Lượt mua quảng cáo'],
                 ['1', @ViewBag.T1, @ViewBag.thang1],
                 ['2', @ViewBag.T2, @ViewBag.thang2],
                 ['3', @ViewBag.T3, @ViewBag.thang3],
@@ -39,7 +39,7 @@
             ]);
 
             var options = {
-                title: 'Biểu đồ thống kế  năm 2021',
+                title: 'Biểu đồ thống kê năm 2021',
                 curveType: 'function',
                 legend: { position: 'bottom' }
             };
